@@ -1,5 +1,5 @@
 import React from 'react';
-import aboutIllustration from '../assets/images/about-illustration.svg';
+import aboutIllustration from '../assets/images/AboutUs.png';
 
 export default function About() {
   return (

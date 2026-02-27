@@ -1,6 +1,8 @@
-* {
-  margin: auto 0px;
-  padding: 0px;
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -67,6 +69,9 @@ body{
 
 /* LOGO */
 .logo {
+  /* now contains image and text */
+  display: flex;
+  align-items: center;
   color: white;
   font-size: 24px;
   font-family: var(--font-cursive);
@@ -75,6 +80,34 @@ body{
   cursor: pointer;
   user-select: none;
   letter-spacing: 0.2px;
+  filter: brightness(0) invert(1);
+}
+
+  .logo img {
+  display: block;
+  height: 48px;
+  width: auto;
+  margin-right: 8px;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-family: var(--font-cursive);
+  font-weight: 400;
+  color: white;
+  white-space: nowrap;
+}
+
+.logo-text span {
+  color: var(--accent);
+  font-family: var(--font-sans);
+  font-weight: 700;
+}
+
+@media (max-width: 420px) {
+  .logo img {
+    height: 32px;
+  }
 }
 
 .logo span {
@@ -1106,4 +1139,44 @@ body{
 @media (max-width:980px){
   .about-grid{grid-template-columns:1fr}
   .about-visual{order:-1}
+}
+
+/* -----------------------------------------------
+   extra small screens (phones < 420px wide)
+   ----------------------------------------------- */
+@media (max-width: 420px) {
+  /* navbar adjustments */
+  .navbar {
+    height: 60px;
+    padding: 0 4%;
+  }
+  .logo { font-size: 20px; }
+  .nav-toggle { width: 36px; height: 28px; }
+  .nav-menu a {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  /* banner text & button sizing */
+  .banner-content {
+    padding: 0 8px;
+  }
+  .banner-content h1 {
+    font-size: clamp(24px, 6vw, 48px);
+  }
+  .banner-content p {
+    font-size: clamp(12px, 3.5vw, 18px);
+  }
+  .main-btn {
+    padding: 12px 28px;
+    font-size: 14px;
+  }
+
+  /* reduce video banner height to keep page from becoming too tall */
+  .video-banner { height: calc(70vh - 60px); }
+
+  /* text size reductions for various headings */
+  .intro h2 { font-size: 20px; }
+  .destinations h3, .packages h3 { font-size: 20px; }
+  .wedding-card h3 { font-size: 26px; }
 }

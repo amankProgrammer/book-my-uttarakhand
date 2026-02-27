@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useSmoothScroll from '../hooks/useSmoothScroll';
+import logo from '../assets/images/logo.png';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -39,7 +40,8 @@ function Navbar() {
   return (
     <header className="navbar">
       <div className="logo" onClick={handleHomeClick}>
-        Book my<span>Uttarakhand</span>
+        <img src={logo} alt="Book our Uttarakhand logo" />
+        <span className="logo-text">Book our <span>Uttarakhand</span></span>
       </div>
       <button
         className="nav-toggle"

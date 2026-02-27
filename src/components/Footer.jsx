@@ -12,7 +12,7 @@ function Footer() {
       <div className="container footer-grid">
         <div className="footer-brand">
           <div className="logo">
-            Book my<span>Uttarakhand</span>
+            Book our<span>Uttarakhand</span>
           </div>
           <p className="tag">Uttarakhand specialists — curated tours, weddings & adventures.</p>
           <div className="socials" aria-hidden="true">
@@ -45,7 +45,7 @@ function Footer() {
 
       <div className="footer-bottom">
         <div className="container">
-          <div className="copy">© {year} BookmyUttarakhand. All rights reserved.</div>
+          <div className="copy">© {year} BookourUttarakhand. All rights reserved.</div>
         </div>
       </div>
     </footer>
