@@ -1,0 +1,64 @@
+import { useEffect } from 'react';
+import './style.css';
+
+// routing
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+
+// components pulled from split-up markup
+import Navbar from './components/Navbar';
+import VideoBanner from './components/VideoBanner';
+import Homescreen from './components/Homescreen';
+import Footer from './components/Footer';
+import TourPackages from './pages/TourPackages';
+import HotelsResorts from './pages/HotelsResorts';
+import UttarakhandDestination from './pages/UttarakhandDestination';
+import useScrollReveal from './hooks/useScrollReveal';
+
+function Layout() {
+  useScrollReveal();
+  return (
+    <>
+      <Navbar />
+      <Outlet />
+      <Footer />
+    </>
+  );
+}
+
+const router = createBrowserRouter(
+  [
+    {
+      element: <Layout />,
+      children: [
+        {
+          path: '/',
+          element: (
+            <>
+              <VideoBanner />
+              <Homescreen />
+            </>
+          ),
+        },
+        { path: '/tour-packages', element: <TourPackages /> },
+        { path: '/hotels-resorts', element: <HotelsResorts /> },
+        { path: '/uttarakhand-destination', element: <UttarakhandDestination /> },
+      ],
+    },
+  ],
+  {
+    future: {
+      v7_startTransition: true,
+      v7_relativeSplatPath: true,
+    },
+  }
+);
+
+function App() {
+  useEffect(() => {
+    // placeholder for any global initialization
+  }, []);
+
+  return <RouterProvider router={router} />;
+}
+
+export default App;
