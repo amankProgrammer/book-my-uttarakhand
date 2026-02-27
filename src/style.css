@@ -80,21 +80,21 @@ body{
   cursor: pointer;
   user-select: none;
   letter-spacing: 0.2px;
-  filter: brightness(0) invert(1);
+  
 }
 
   .logo img {
   display: block;
-  height: 48px;
+  height: 130px;
   width: auto;
   margin-right: 8px;
+  filter: brightness(0) invert(1);
 }
 
 .logo-text {
   font-size: 24px;
   font-family: var(--font-cursive);
   font-weight: 400;
-  color: white;
   white-space: nowrap;
 }
 
@@ -108,12 +108,6 @@ body{
   .logo img {
     height: 32px;
   }
-}
-
-.logo span {
-  color: var(--accent);
-  font-family: var(--font-sans);
-  font-weight: 700;
 }
 
 /* MENU FIX */
