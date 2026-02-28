@@ -1,64 +1,102 @@
 import React, { useState } from 'react';
 
+const packageImages = [
+  'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1200&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=1200&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=1200&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1439130490301-25e322d88054?q=80&w=1200&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?q=80&w=1200&auto=format&fit=crop',
+];
+
+const createHotel = (
+  name,
+  price,
+  nights = 2,
+  days = 3,
+  imageIndex = 0,
+  amenities = ['wifi', 'pool', 'spa', 'breakfast']
+) => ({
+  name,
+  price,
+  nights,
+  days,
+  img: packageImages[imageIndex % packageImages.length],
+  amenities,
+});
+
 const data = [
   {
     title: 'Jim Corbett',
     hotels: [
-      { name: 'Amrais Green', img: 'https://via.placeholder.com/300x160?text=Amrais+Green' },
-      { name: 'Maulik Mansion', img: 'https://via.placeholder.com/300x160?text=Maulik+Mansion' },
-      { name: 'The Corbett Silva', img: 'https://via.placeholder.com/300x160?text=The+Corbett+Silva' },
-      { name: 'Vasavana Resort', img: 'https://via.placeholder.com/300x160?text=Vasavana+Resort' },
-      { name: 'Maya the Forest Resort', img: 'https://via.placeholder.com/300x160?text=Maya+the+Forest+Resort' },
-      { name: 'Dee Fellows', img: 'https://via.placeholder.com/300x160?text=Dee+Fellows' },
-      { name: 'La Perle', img: 'https://via.placeholder.com/300x160?text=La+Perle' },
-      { name: 'Banyan Retreat', img: 'https://via.placeholder.com/300x160?text=Banyan+Retreat' },
-      { name: 'Corbett Tusker Trail', img: 'https://via.placeholder.com/300x160?text=Corbett+Tusker+Trail' },
-      { name: 'Corbett Grace', img: 'https://via.placeholder.com/300x160?text=Corbett+Grace' },
+      createHotel('Amrais Green', '15,000', 2, 3, 0),
+      createHotel('Maulik Mansion', '16,500', 2, 3, 1, ['wifi', 'parking', 'breakfast', 'mountain-view']),
+      createHotel('The Corbett Silva', '17,999', 3, 4, 2, ['wifi', 'pool', 'parking', 'bonfire']),
+      createHotel('Vasavana Resort', '21,000', 2, 3, 3, ['wifi', 'spa', 'breakfast', 'dj-night']),
+      createHotel('Maya the Forest Resort', '18,500', 2, 3, 4),
+      createHotel('Dee Fellows', '14,500', 2, 3, 5, ['wifi', 'parking', 'spa', 'mountain-view']),
+      createHotel('La Perle', '19,500', 3, 4, 6, ['wifi', 'pool', 'breakfast', 'bonfire']),
+      createHotel('Banyan Retreat', '22,000', 2, 3, 7),
+      createHotel('Corbett Tusker Trail', '16,999', 2, 3, 0, ['wifi', 'spa', 'parking', 'bonfire']),
+      createHotel('Corbett Grace', '15,999', 2, 3, 1, ['wifi', 'pool', 'breakfast', 'dj-night']),
     ],
   },
   {
     title: 'Nainital',
     hotels: [
-      { name: 'Cedar wood', img: 'https://via.placeholder.com/300x160?text=Cedar+wood' },
-      { name: 'Aroma', img: 'https://via.placeholder.com/300x160?text=Aroma' },
-      { name: 'Manu Maharani Regency', img: 'https://via.placeholder.com/300x160?text=Manu+Maharani+Regency' },
-      { name: 'Royal heritage resort', img: 'https://via.placeholder.com/300x160?text=Royal+heritage+resort' },
-      { name: 'The Palace Belvedere', img: 'https://via.placeholder.com/300x160?text=The+Palace+Belvedere' },
+      createHotel('Cedar wood', '12,999', 2, 3, 2, ['wifi', 'parking', 'breakfast', 'mountain-view']),
+      createHotel('Aroma', '13,500', 2, 3, 3),
+      createHotel('Manu Maharani Regency', '20,000', 3, 4, 4),
+      createHotel('Royal heritage resort', '17,500', 2, 3, 5, ['wifi', 'pool', 'breakfast', 'dj-night']),
+      createHotel('The Palace Belvedere', '23,500', 3, 4, 6, ['wifi', 'spa', 'parking', 'mountain-view']),
     ],
   },
   {
     title: 'Almora',
-    hotels: [{ name: 'The Mountain Paradise', img: 'https://via.placeholder.com/300x160?text=The+Mountain+Paradise' }],
+    hotels: [createHotel('The Mountain Paradise', '11,500', 2, 3, 7)],
   },
   {
     title: 'Kausani',
     hotels: [
-      { name: 'Nature valley', img: 'https://via.placeholder.com/300x160?text=Nature+valley' },
-      { name: 'Kasauni inn', img: 'https://via.placeholder.com/300x160?text=Kasauni+inn' },
-      { name: 'Kasauni Regency Resort', img: 'https://via.placeholder.com/300x160?text=Kasauni+Regency+Resort' },
+      createHotel('Nature valley', '10,999', 2, 3, 0),
+      createHotel('Kasauni inn', '12,499', 2, 3, 1),
+      createHotel('Kasauni Regency Resort', '14,999', 2, 3, 2),
     ],
   },
   {
     title: 'Ranikhet',
     hotels: [
-      { name: 'Pool Retreat Ranikhet', img: 'https://via.placeholder.com/300x160?text=Pool+Retreat+Ranikhet' },
-      { name: 'Colonels Paradise', img: 'https://via.placeholder.com/300x160?text=Colonels+Paradise' },
+      createHotel('Pool Retreat Ranikhet', '13,999', 2, 3, 3),
+      createHotel('Colonels Paradise', '12,999', 2, 3, 4, ['wifi', 'breakfast', 'parking', 'bonfire']),
     ],
   },
   {
     title: 'Mussoorie',
     hotels: [
-      { name: 'Wild Sping', img: 'https://via.placeholder.com/300x160?text=Wild+Sping' },
-      { name: 'Shining Hills', img: 'https://via.placeholder.com/300x160?text=Shining+Hills' },
-      { name: 'MV Acosta', img: 'https://via.placeholder.com/300x160?text=MV+Acosta' },
-      { name: 'Solitaire Resort', img: 'https://via.placeholder.com/300x160?text=Solitaire+Resort' },
+      createHotel('Wild Sping', '14,500', 2, 3, 5),
+      createHotel('Shining Hills', '15,500', 2, 3, 6),
+      createHotel('MV Acosta', '19,000', 3, 4, 7),
+      createHotel('Solitaire Resort', '21,500', 3, 4, 0, ['wifi', 'pool', 'spa', 'dj-night']),
     ],
   },
 ];
 
 function toLargePreview(src) {
-  return src.replace('300x160', '900x480');
+  return src;
 }
+
+const amenityMap = {
+  wifi: { icon: '\uD83D\uDCF6', label: 'WiFi' },
+  pool: { icon: '\uD83C\uDFCA', label: 'Pool' },
+  spa: { icon: '\uD83E\uDDDE', label: 'Spa' },
+  parking: { icon: '\uD83C\uDD7F\uFE0F', label: 'Parking' },
+  breakfast: { icon: '\uD83C\uDF7D\uFE0F', label: 'Breakfast' },
+  'mountain-view': { icon: '\u26F0\uFE0F', label: 'Mountain View' },
+  bonfire: { icon: '\uD83D\uDD25', label: 'Bonfire' },
+  'dj-night': { icon: '\uD83C\uDFB5', label: 'DJ Night' },
+};
 
 export default function HotelsResorts() {
   const [modalSrc, setModalSrc] = useState('');
@@ -84,12 +122,39 @@ export default function HotelsResorts() {
                   <button type="button" className="hotel-image-btn" onClick={() => setModalSrc(toLargePreview(hotel.img))}>
                     <img src={hotel.img} alt={hotel.name} />
                   </button>
-                  <div className="hotel-overlay">View</div>
-                  <h3 className="hotel-name">{hotel.name}</h3>
-                  <p className="hotel-desc">Comfortable stay with scenic Uttarakhand surroundings.</p>
-                  <div className="hotel-meta">
-                    <span className="hotel-stars" aria-hidden="true">★★★★★</span>
-                    <span>Uttarakhand</span>
+                  <h3 className="hotel-name">{hotel.name} Wedding Package</h3>
+                  <div className="hotel-amenities" aria-label="Amenities">
+                    {hotel.amenities.map((amenity) => {
+                      const item = amenityMap[amenity];
+                      if (!item) return null;
+                      return (
+                        <span key={amenity} className="amenity-chip" title={item.label}>
+                          <span aria-hidden="true">{item.icon}</span>
+                          <span>{item.label}</span>
+                        </span>
+                      );
+                    })}
+                  </div>
+                  <div className="hotel-package-footer">
+                    <div className="hotel-duration">
+                      <div className="hotel-duration-label">Duration</div>
+                      <div className="hotel-duration-values">
+                        <div className="duration-item">
+                          <span className="duration-num">{hotel.nights}</span>
+                          <span className="duration-unit">NIGHTS</span>
+                        </div>
+                        <span className="duration-sep" aria-hidden="true">&#10043;</span>
+                        <div className="duration-item">
+                          <span className="duration-num">{hotel.days}</span>
+                          <span className="duration-unit">DAYS</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="hotel-price-panel">
+                      <span className="hotel-price-label">Starting from</span>
+                      <span className="hotel-price-value">&#8377; {hotel.price}</span>
+                      <span className="hotel-price-note">/PER PERSON</span>
+                    </div>
                   </div>
                 </article>
               ))}
@@ -107,7 +172,7 @@ export default function HotelsResorts() {
               onClick={(e) => e.stopPropagation()}
             >
               <button type="button" className="image-modal-close" onClick={() => setModalSrc('')} aria-label="Close image preview">
-                ×
+                &times;
               </button>
               <img src={modalSrc} alt="Selected hotel preview" />
             </div>
