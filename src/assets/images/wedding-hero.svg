@@ -9,10 +9,6 @@
   <g transform="translate(80,120)" fill="#fff" opacity="0.18">
     <ellipse cx="720" cy="280" rx="520" ry="200"/>
   </g>
-  <g font-family="'Playfair Display', serif" text-anchor="start">
-    <text x="90" y="220" font-size="56" fill="#6b2b4a">Destination Weddings</text>
-    <text x="90" y="280" font-size="26" fill="#4b241e">Himalayan vistas • Riverside ceremonies • Luxury resorts</text>
-  </g>
   <g transform="translate(900,150)" opacity="0.08">
     <circle cx="120" cy="80" r="80" fill="#ff9cc0"/>
     <circle cx="220" cy="180" r="120" fill="#b8f2d6"/>

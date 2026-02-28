@@ -46,7 +46,7 @@ export default function Destinations() {
   useAutoScroll(rowRef, 60);  // 60 pixels per second
 
   return (
-    <section className="destinations" data-reveal>
+    <section className="destinations" id="destinations" data-reveal>
       <div className="container">
         <h3>Top Tourist Destinations 🗺️</h3>
         <div

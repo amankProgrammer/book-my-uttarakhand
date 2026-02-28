@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import './style.css';
+import './pages/pages.css';
 
 // routing
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
@@ -54,10 +54,6 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  useEffect(() => {
-    // placeholder for any global initialization
-  }, []);
-
   return <RouterProvider router={router} />;
 }
 

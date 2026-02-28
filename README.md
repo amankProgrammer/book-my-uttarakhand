@@ -1,16 +1,89 @@
-# React + Vite
+# Book our Uttarakhand (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Marketing website for Uttarakhand travel, packages, hotels, and destination weddings.
 
-Currently, two official plugins are available:
+## Tech stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19
+- React Router 6
+- Vite 7
+- ESLint 9
 
-## React Compiler
+## Quick start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+App runs at `http://localhost:5173` by default.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Available scripts
+
+- `npm run dev`: start development server
+- `npm run build`: production build
+- `npm run preview`: preview the production build
+- `npm run lint`: run ESLint
+
+## Environment variables
+
+Create `.env` in project root:
+
+```env
+VITE_ENQUIRY_ENDPOINT=https://your-api.example.com/enquiry
+VITE_NEWSLETTER_ENDPOINT=https://your-api.example.com/newsletter
+```
+
+### Expected form payloads
+
+`VITE_ENQUIRY_ENDPOINT` receives:
+
+```json
+{
+  "name": "string",
+  "email": "string",
+  "phone": "string",
+  "message": "string",
+  "source": "bookouruttarakhand-enquiry",
+  "submittedAt": "ISO date string"
+}
+```
+
+`VITE_NEWSLETTER_ENDPOINT` receives:
+
+```json
+{
+  "email": "string",
+  "source": "bookouruttarakhand-newsletter",
+  "submittedAt": "ISO date string"
+}
+```
+
+Both endpoints should return `2xx` for success.
+
+## Content workflow
+
+- Home sections: `src/components/*`
+- Route pages:
+  - `src/pages/TourPackages.jsx`
+  - `src/pages/HotelsResorts.jsx`
+  - `src/pages/UttarakhandDestination.jsx`
+- Global styling: `src/style.css`
+- Page-level styling: `src/pages/pages.css`
+
+## Media workflow
+
+Hero videos are in `src/assets/videos/` and are now rendered one-at-a-time for better performance.
+
+Optional local compression (requires ffmpeg installed):
+
+```bash
+ffmpeg -i input.mp4 -vf "scale=1280:-2" -c:v libx264 -crf 28 -preset fast -c:a aac -b:a 128k output.mp4
+```
+
+Replace heavy originals with optimized files of the same names after validation.
+
+## Notes
+
+- Mobile and reduced-motion users get an image fallback in the hero section.
+- Navigation and controls were updated for keyboard/accessibility support.

@@ -3,11 +3,13 @@ import pkgFamily from '../assets/images/pkg-family.svg';
 import pkgChardham from '../assets/images/pkg-chardham.svg';
 import pkgWildlife from '../assets/images/pkg-wildlife.svg';
 import pkgAdventure from '../assets/images/pkg-adventure.svg';
+import useSmoothScroll from '../hooks/useSmoothScroll';
 
 export default function Packages() {
+  const scrollEnquiry = useSmoothScroll('#enquiry');
 
   return (
-    <section className="packages" data-reveal>
+    <section className="packages" id="packages" data-reveal>
       <div className="container">
         <h3>Uttarakhand Tour Packages 🎒</h3>
         <div className="package-cards">
@@ -22,7 +24,7 @@ export default function Packages() {
               <p>Comfortable sightseeing & guided stays.</p>
               <div className="pkg-meta">
                 <span className="price">From ₹12,999</span>
-                <button className="small-cta">Book Now</button>
+                <button className="small-cta" type="button" onClick={scrollEnquiry}>Book Now</button>
               </div>
             </div>
           </article>
@@ -39,7 +41,7 @@ export default function Packages() {
               <p>Sacred pilgrimage across the four dhams.</p>
               <div className="pkg-meta">
                 <span className="price">From ₹24,999</span>
-                <button className="small-cta">Enquire</button>
+                <button className="small-cta" type="button" onClick={scrollEnquiry}>Enquire</button>
               </div>
             </div>
           </article>
@@ -56,7 +58,7 @@ export default function Packages() {
               <p>Jeep safaris & jungle stays.</p>
               <div className="pkg-meta">
                 <span className="price">From ₹10,499</span>
-                <button className="small-cta">Book Safari</button>
+                <button className="small-cta" type="button" onClick={scrollEnquiry}>Book Safari</button>
               </div>
             </div>
           </article>
@@ -73,7 +75,7 @@ export default function Packages() {
               <p>Trekking, rafting & camping adventures.</p>
               <div className="pkg-meta">
                 <span className="price">From ₹8,999</span>
-                <button className="small-cta">Explore</button>
+                <button className="small-cta" type="button" onClick={scrollEnquiry}>Explore</button>
               </div>
             </div>
           </article>

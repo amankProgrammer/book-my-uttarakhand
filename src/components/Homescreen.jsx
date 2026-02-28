@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Destinations from './Destinations';
 import Intro from './Intro';
 import Packages from './Packages';
@@ -7,6 +7,7 @@ import About from './About';
 import WeddingSection from './WeddingSection';
 import BestTime from './BestTime';
 import EnquirySection from './EnquirySection';
+import { consumePendingHomeScroll, scrollToSection } from '../hooks/useHomeSectionNavigation';
 
 export default function Homescreen() {
   const [lightboxSrc, setLightboxSrc] = useState('');
@@ -23,8 +24,28 @@ export default function Homescreen() {
     setLightboxSrc('');
   };
 
+  useEffect(() => {
+    const hashTarget = window.location.hash.replace('#', '');
+    if (hashTarget) {
+      requestAnimationFrame(() => scrollToSection(hashTarget));
+    }
+
+    consumePendingHomeScroll();
+  }, []);
+
+  useEffect(() => {
+    if (!lightboxOpen) return undefined;
+
+    const onEscape = (event) => {
+      if (event.key === 'Escape') closeLightbox();
+    };
+
+    window.addEventListener('keydown', onEscape);
+    return () => window.removeEventListener('keydown', onEscape);
+  }, [lightboxOpen]);
+
   return (
-    <main id="home" className="homescreen">
+    <main id="home-content" className="homescreen">
       <Intro />
       <Destinations />
       <Packages />
@@ -36,7 +57,14 @@ export default function Homescreen() {
 
       {/* Lightbox Overlay */}
       {lightboxOpen && (
-        <div id="lightbox" className="lightbox" onClick={closeLightbox} role="dialog" aria-label="Image viewer">
+        <div
+          id="lightbox"
+          className="lightbox"
+          onClick={closeLightbox}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Wedding gallery image viewer"
+        >
           <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
             <button className="lightbox-close" aria-label="Close" onClick={closeLightbox}>
               ×

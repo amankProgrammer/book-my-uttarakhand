@@ -1,9 +1,12 @@
 import React from 'react';
 import aboutIllustration from '../assets/images/AboutUs.png';
+import useHomeSectionNavigation from '../hooks/useHomeSectionNavigation';
 
 export default function About() {
+  const goToHomeSection = useHomeSectionNavigation();
+
   return (
-    <section className="about-section" data-reveal>
+    <section className="about-section" id="about" data-reveal>
       <div className="container about-grid">
         <div className="about-text">
           <h3>🏔 About Us</h3>
@@ -25,8 +28,12 @@ export default function About() {
             <li><strong>Hassle-Free Planning</strong></li>
           </ul>
           <div className="about-cta">
-            <button className="primary-cta">Meet Our Team</button>
-            <a href="#enquiryModal" className="secondary-link">Request a Callback</a>
+            <button className="primary-cta" type="button" onClick={() => goToHomeSection('enquiry')}>
+              Meet Our Team
+            </button>
+            <button className="secondary-link" type="button" onClick={() => goToHomeSection('enquiry')}>
+              Request a Callback
+            </button>
           </div>
         </div>
         <div className="about-visual" aria-hidden="true">

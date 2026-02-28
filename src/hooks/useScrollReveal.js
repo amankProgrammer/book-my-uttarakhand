@@ -13,6 +13,9 @@ export default function useScrollReveal() {
         for (const entry of entries) {
           if (entry.isIntersecting) {
             entry.target.classList.add('reveal-visible');
+            if (entry.target.hasAttribute('data-confetti')) {
+              window.dispatchEvent(new Event('show-confetti'));
+            }
             io.unobserve(entry.target);
           }
         }

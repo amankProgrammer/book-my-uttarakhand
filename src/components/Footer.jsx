@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import footerScene from '../assets/images/footer-design.png';
+import useHomeSectionNavigation from '../hooks/useHomeSectionNavigation';
 
 function Footer() {
   const year = new Date().getFullYear();
+  const goToHomeSection = useHomeSectionNavigation();
 
   return (
     <footer className="site-footer">
@@ -15,19 +18,14 @@ function Footer() {
             Book our<span>Uttarakhand</span>
           </div>
           <p className="tag">Uttarakhand specialists — curated tours, weddings & adventures.</p>
-          <div className="socials" aria-hidden="true">
-            <a href="#" className="s">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S1.86 6.48 1.86 12.07c0 4.99 3.66 9.14 8.44 9.88v-6.99H8.07v-2.89h2.23V9.41c0-2.2 1.31-3.42 3.31-3.42.96 0 1.96.17 1.96.17v2.15h-1.1c-1.09 0-1.42.67-1.42 1.36v1.63h2.42l-.39 2.89h-2.03v6.99c4.78-.74 8.44-4.89 8.44-9.88z" fill="#fff"/></svg>
-            </a>
-          </div>
         </div>
         <div className="footer-links">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="#">Top Destinations</a></li>
-            <li><a href="#">Tour Packages</a></li>
-            <li><a href="#">Destination Weddings</a></li>
-            <li><a href="#">Contact Us</a></li>
+            <li><Link to="/uttarakhand-destination">Top Destinations</Link></li>
+            <li><Link to="/tour-packages">Tour Packages</Link></li>
+            <li><button type="button" className="footer-link-btn" onClick={() => goToHomeSection('wedding')}>Destination Weddings</button></li>
+            <li><button type="button" className="footer-link-btn" onClick={() => goToHomeSection('enquiry')}>Contact Us</button></li>
           </ul>
         </div>
         <div className="footer-contact">
@@ -53,21 +51,78 @@ function Footer() {
 }
 
 function NewsletterForm() {
-  const [subscribed, setSubscribed] = useState(false);
-  const handleSubmit = (e) => {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle');
+  const [message, setMessage] = useState('');
+  const endpoint = import.meta.env.VITE_NEWSLETTER_ENDPOINT;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubscribed(true);
+    const trimmedEmail = email.trim();
+    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
+
+    if (!validEmail) {
+      setStatus('error');
+      setMessage('Please enter a valid email address.');
+      return;
+    }
+
+    if (!endpoint) {
+      setStatus('error');
+      setMessage('Newsletter endpoint is not configured.');
+      return;
+    }
+
+    setStatus('submitting');
+    setMessage('');
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: trimmedEmail,
+          source: 'bookouruttarakhand-newsletter',
+          submittedAt: new Date().toISOString(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Newsletter request failed');
+      }
+
+      setStatus('success');
+      setMessage('Thanks — you are subscribed! Check your inbox for offers.');
+      setEmail('');
+    } catch {
+      setStatus('error');
+      setMessage('Unable to subscribe right now. Please try again in a few minutes.');
+    }
   };
 
-  return subscribed ? (
-    <div style={{ padding: '12px', color: '#0b3d2e', fontWeight: 700 }}>
-      Thanks — you are subscribed!
-      <div style={{ fontSize: '12px', color: '#556' }}>Check your inbox for offers.</div>
-    </div>
-  ) : (
-    <form id="newsletterForm" className="newsletter-form" onSubmit={handleSubmit}>
-      <input type="email" name="email" placeholder="Your email address" required />
-      <button type="submit" className="small-cta">Subscribe</button>
+  return (
+    <form id="newsletterForm" className="newsletter-form" onSubmit={handleSubmit} noValidate>
+      <input
+        type="email"
+        name="email"
+        placeholder="Your email address"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        aria-invalid={status === 'error'}
+      />
+      <button type="submit" className="small-cta" disabled={status === 'submitting'}>
+        {status === 'submitting' ? 'Subscribing...' : 'Subscribe'}
+      </button>
+      {message && (
+        <p
+          className={status === 'success' ? 'form-feedback success' : 'form-feedback error'}
+          role={status === 'success' ? 'status' : 'alert'}
+          aria-live="polite"
+        >
+          {message}
+        </p>
+      )}
     </form>
   );
 }
