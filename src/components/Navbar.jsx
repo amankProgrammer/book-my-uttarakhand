@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 import useHomeSectionNavigation from '../hooks/useHomeSectionNavigation';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const location = useLocation();
   const goToHomeSection = useHomeSectionNavigation();
 
   const closeMenu = () => {
@@ -21,6 +22,45 @@ function Navbar() {
   const toggleDropdown = (key) => () => {
     setOpenDropdown((prev) => (prev === key ? null : key));
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      closeMenu();
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [location.pathname, location.hash]);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth > 1200) {
+        closeMenu();
+      }
+    };
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        closeMenu();
+      }
+    };
+
+    window.addEventListener('resize', onResize);
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle('mobile-menu-open', open);
+    return () => {
+      document.body.classList.remove('mobile-menu-open');
+    };
+  }, [open]);
 
   return (
     <header className="navbar">
@@ -38,7 +78,7 @@ function Navbar() {
       <button
         className="nav-toggle"
         type="button"
-        aria-label="Toggle navigation"
+        aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
         aria-expanded={open}
         aria-controls="primary-navigation"
         onClick={() => {
@@ -72,13 +112,13 @@ function Navbar() {
               All Destinations
             </Link>
             <Link to="/uttarakhand-destination" onClick={closeMenu}>
-              Nainital– Lake District of India
+              Nainital - Lake District of India
             </Link>
             <Link to="/uttarakhand-destination" onClick={closeMenu}>
-              Almora – Cultural Hill Town
+              Almora - Cultural Hill Town
             </Link>
             <Link to="/uttarakhand-destination" onClick={closeMenu}>
-              Kausani – Mini Switzerland of India
+              Kausani - Mini Switzerland of India
             </Link>
           </div>
         </div>
@@ -163,3 +203,4 @@ function Navbar() {
 }
 
 export default Navbar;
+
