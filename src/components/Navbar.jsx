@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 import useHomeSectionNavigation from '../hooks/useHomeSectionNavigation';
+import { uttarakhandDestinations } from '../data/uttarakhandDestinations';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -105,21 +106,17 @@ function Navbar() {
             aria-expanded={openDropdown === 'destinations'}
             onClick={toggleDropdown('destinations')}
           >
-            Uttarakhand Destination
+            Uttarakhand Destinations
           </button>
           <div className="dropdown-menu">
             <Link to="/uttarakhand-destination" onClick={closeMenu}>
               All Destinations
             </Link>
-            <Link to="/uttarakhand-destination" onClick={closeMenu}>
-              Nainital - Lake District of India
-            </Link>
-            <Link to="/uttarakhand-destination" onClick={closeMenu}>
-              Almora - Cultural Hill Town
-            </Link>
-            <Link to="/uttarakhand-destination" onClick={closeMenu}>
-              Kausani - Mini Switzerland of India
-            </Link>
+            {uttarakhandDestinations.map((destination) => (
+              <Link key={destination.slug} to={`/uttarakhand-destination#${destination.slug}`} onClick={closeMenu}>
+                {destination.title}
+              </Link>
+            ))}
           </div>
         </div>
         <div className={openDropdown === 'packages' ? 'dropdown dropdown-open' : 'dropdown'}>
@@ -147,7 +144,7 @@ function Navbar() {
         <Link to="/hotels-resorts" onClick={closeMenu}>
           Hotels/Resort
         </Link>
-        <Link to="/destination-wedding#wedding-gallery" onClick={closeMenu}>
+        <Link to="/gallery" onClick={closeMenu}>
           Gallery
         </Link>
         <div className={openDropdown === 'wedding' ? 'dropdown dropdown-open' : 'dropdown'}>

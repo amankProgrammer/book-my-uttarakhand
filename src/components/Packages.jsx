@@ -1,9 +1,37 @@
 import React from 'react';
-import pkgFamily from '../assets/images/pkg-family.svg';
-import pkgChardham from '../assets/images/pkg-chardham.svg';
-import pkgWildlife from '../assets/images/pkg-wildlife.svg';
-import pkgAdventure from '../assets/images/pkg-adventure.svg';
+import { Link } from 'react-router-dom';
 import useSmoothScroll from '../hooks/useSmoothScroll';
+
+const travelStyles = [
+  {
+    title: 'Family Comfort Trips',
+    image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&auto=format&fit=crop&q=80',
+    summary: 'Balanced sightseeing, comfortable hotels, and smooth transfers for all age groups.',
+    points: ['2N to 5N plans', 'Cab + stay support', 'Kid-friendly pacing'],
+    budget: 'From INR 12,999',
+  },
+  {
+    title: 'Spiritual Route Plans',
+    image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=1200&auto=format&fit=crop&q=80',
+    summary: 'Carefully sequenced temple journeys with route planning and practical halt recommendations.',
+    points: ['Char Dham options', 'Senior-friendly planning', 'Guided stopovers'],
+    budget: 'From INR 24,999',
+  },
+  {
+    title: 'Wildlife and Forest Stays',
+    image: 'https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=1200&auto=format&fit=crop&q=80',
+    summary: 'Safari-focused getaways around Corbett and Rajaji with nature-rich accommodation options.',
+    points: ['Safari scheduling help', 'Resort options by zone', 'Birding add-ons'],
+    budget: 'From INR 10,499',
+  },
+  {
+    title: 'Adventure and Camping',
+    image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&auto=format&fit=crop&q=80',
+    summary: 'Itineraries built around trekking, rafting, camping, and activity-based mountain holidays.',
+    points: ['Beginner to advanced', 'Safety-first planning', 'Custom difficulty level'],
+    budget: 'From INR 8,999',
+  },
+];
 
 export default function Packages() {
   const scrollEnquiry = useSmoothScroll('#enquiry');
@@ -11,74 +39,38 @@ export default function Packages() {
   return (
     <section className="packages" id="packages" data-reveal>
       <div className="container">
-        <h3>Uttarakhand Tour Packages 🎒</h3>
+        <div className="packages-head">
+          <h3>Travel Styles We Curate</h3>
+          <p>
+            This is a quick preview. For full day-wise details, inclusions, and custom combinations, open the complete
+            packages page.
+          </p>
+          <Link className="pkg-page-link" to="/tour-packages">
+            Open Full Tour Packages
+          </Link>
+        </div>
+
         <div className="package-cards">
-          <article className="pkg-card">
-            <div
-              className="pkg-img"
-              style={{ backgroundImage: `url('${pkgFamily}')` }}
-              aria-hidden="true"
-            />
-            <div className="pkg-body">
-              <h4>Family Tour</h4>
-              <p>Comfortable sightseeing & guided stays.</p>
-              <div className="pkg-meta">
-                <span className="price">From ₹12,999</span>
-                <button className="small-cta" type="button" onClick={scrollEnquiry}>Book Now</button>
+          {travelStyles.map((style) => (
+            <article className="pkg-card" key={style.title}>
+              <div className="pkg-img" style={{ backgroundImage: `url('${style.image}')` }} aria-hidden="true" />
+              <div className="pkg-body">
+                <h4>{style.title}</h4>
+                <p>{style.summary}</p>
+                <ul className="pkg-points">
+                  {style.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+                <div className="pkg-meta">
+                  <span className="price">{style.budget}</span>
+                  <button className="small-cta" type="button" onClick={scrollEnquiry}>
+                    Customize This Plan
+                  </button>
+                </div>
               </div>
-            </div>
-          </article>
-          <article className="pkg-card">
-            <div
-              className="pkg-img"
-              style={{
-                backgroundImage: `url('${pkgChardham}')`,
-              }}
-              aria-hidden="true"
-            />
-            <div className="pkg-body">
-              <h4>Char Dham</h4>
-              <p>Sacred pilgrimage across the four dhams.</p>
-              <div className="pkg-meta">
-                <span className="price">From ₹24,999</span>
-                <button className="small-cta" type="button" onClick={scrollEnquiry}>Enquire</button>
-              </div>
-            </div>
-          </article>
-          <article className="pkg-card">
-            <div
-              className="pkg-img"
-              style={{
-                backgroundImage: `url('${pkgWildlife}')`,
-              }}
-              aria-hidden="true"
-            />
-            <div className="pkg-body">
-              <h4>Wildlife Tour</h4>
-              <p>Jeep safaris & jungle stays.</p>
-              <div className="pkg-meta">
-                <span className="price">From ₹10,499</span>
-                <button className="small-cta" type="button" onClick={scrollEnquiry}>Book Safari</button>
-              </div>
-            </div>
-          </article>
-          <article className="pkg-card">
-            <div
-              className="pkg-img"
-              style={{
-                backgroundImage: `url('${pkgAdventure}')`,
-              }}
-              aria-hidden="true"
-            />
-            <div className="pkg-body">
-              <h4>Adventure Tour</h4>
-              <p>Trekking, rafting & camping adventures.</p>
-              <div className="pkg-meta">
-                <span className="price">From ₹8,999</span>
-                <button className="small-cta" type="button" onClick={scrollEnquiry}>Explore</button>
-              </div>
-            </div>
-          </article>
+            </article>
+          ))}
         </div>
       </div>
     </section>
