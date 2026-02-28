@@ -24,7 +24,7 @@ function Footer() {
           <ul>
             <li><Link to="/uttarakhand-destination">Top Destinations</Link></li>
             <li><Link to="/tour-packages">Tour Packages</Link></li>
-            <li><button type="button" className="footer-link-btn" onClick={() => goToHomeSection('wedding')}>Destination Weddings</button></li>
+            <li><Link to="/destination-wedding">Destination Weddings</Link></li>
             <li><button type="button" className="footer-link-btn" onClick={() => goToHomeSection('enquiry')}>Contact Us</button></li>
           </ul>
         </div>

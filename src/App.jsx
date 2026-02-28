@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 import TourPackages from './pages/TourPackages';
 import HotelsResorts from './pages/HotelsResorts';
 import UttarakhandDestination from './pages/UttarakhandDestination';
+import DestinationWedding from './pages/DestinationWedding';
 import useScrollReveal from './hooks/useScrollReveal';
 
 function Layout() {
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
         { path: '/tour-packages', element: <TourPackages /> },
         { path: '/hotels-resorts', element: <HotelsResorts /> },
         { path: '/uttarakhand-destination', element: <UttarakhandDestination /> },
+        { path: '/destination-wedding', element: <DestinationWedding /> },
       ],
     },
   ],

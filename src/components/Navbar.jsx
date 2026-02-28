@@ -107,9 +107,9 @@ function Navbar() {
         <Link to="/hotels-resorts" onClick={closeMenu}>
           Hotels/Resort
         </Link>
-        <button type="button" className="nav-link-button" onClick={() => handleSectionClick('wedding-gallery')}>
+        <Link to="/destination-wedding#wedding-gallery" onClick={closeMenu}>
           Gallery
-        </button>
+        </Link>
         <div className={openDropdown === 'wedding' ? 'dropdown dropdown-open' : 'dropdown'}>
           <button
             type="button"
@@ -121,15 +121,15 @@ function Navbar() {
             Destination Wedding
           </button>
           <div className="dropdown-menu">
-            <button type="button" onClick={() => handleSectionClick('wedding')}>
+            <Link to="/destination-wedding" onClick={closeMenu}>
               Destination Wedding
-            </button>
-            <button type="button" onClick={() => handleSectionClick('wedding-gallery')}>
-              Pre Wedding
-            </button>
-            <button type="button" onClick={() => handleSectionClick('enquiry')}>
+            </Link>
+            <Link to="/destination-wedding#wedding-venues" onClick={closeMenu}>
+              Wedding Venues
+            </Link>
+            <Link to="/destination-wedding#wedding-services" onClick={closeMenu}>
               Wedding Planning
-            </button>
+            </Link>
           </div>
         </div>
         <div className={openDropdown === 'support' ? 'dropdown dropdown-open' : 'dropdown'}>

@@ -10,6 +10,7 @@
 :root{
   --font-sans: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   --font-cursive: 'Pacifico', cursive;
+  --navbar-height: 80px;
 
   --bg: #f3fff4;
   --text: #0f172a;
@@ -60,7 +61,7 @@ body{
   position: fixed;
   top: 0;
   width: 100%;
-  height: 80px;
+  height: var(--navbar-height);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -90,7 +91,7 @@ body{
 
   .logo img {
   display: block;
-  height: 130px;
+  height: 56px;
   width: auto;
   margin-right: 8px;
   filter: brightness(0) invert(1);
@@ -219,33 +220,43 @@ body{
   background: rgba(255, 255, 255, 0.1);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .nav-toggle {
     display: inline-flex;
   }
 
   .nav-menu {
     position: absolute;
-    top: 80px;
+    top: 100%;
     right: 0;
     left: 0;
     background: rgba(0, 0, 0, 0.96);
     flex-direction: column;
     align-items: flex-start;
-    padding: 8px 16px 16px;
-    gap: 4px;
+    padding: 0 16px;
+    gap: 0;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.25s ease-out;
+    opacity: 0;
+    pointer-events: none;
+    transition: max-height 0.25s ease-out, opacity 0.2s ease-out, padding 0.25s ease-out;
   }
 
   .nav-menu-open {
-    max-height: 400px;
+    max-height: calc(100vh - var(--navbar-height));
+    padding: 8px 16px 16px;
+    opacity: 1;
+    pointer-events: auto;
+    overflow-y: auto;
   }
 
   .nav-menu a,
   .nav-menu .nav-link-button,
   .nav-menu .dropdown-toggle {
+    width: 100%;
+  }
+
+  .dropdown {
     width: 100%;
   }
 
@@ -271,8 +282,8 @@ body{
 
 .video-banner {
   /* Fill viewport area below fixed 80px navbar */
-  margin-top: 80px;
-  height: calc(100vh - 80px);
+  margin-top: var(--navbar-height);
+  height: calc(100vh - var(--navbar-height));
   position: relative;
   overflow: hidden;
   display: block;
@@ -281,6 +292,16 @@ body{
 .video-container {
   position: absolute;
   inset: 0;
+  background: #0b1218;
+}
+
+.video-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.95);
 }
 
 .video-slide {
@@ -293,11 +314,14 @@ body{
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0;
-  transition: 1s;
+  visibility: hidden;
+  transition: opacity .8s ease;
+  will-change: opacity;
 }
 
 .video-slide.active {
   opacity: 1;
+  visibility: visible;
 }
 
 .banner-fallback {
@@ -1216,9 +1240,9 @@ body{
 
 /* Destination wedding showcase */
 .dw-hero {
-  height: 100vh;
-  margin-top: 20px;
-  padding: 24px;
+  height: calc(100vh - 80px);
+  margin-top: 80px;
+  padding: 24px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1283,46 +1307,32 @@ body{
   font-size: 1.1rem;
 }
 
-.dw-couple-flex {
-  margin-top: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  flex-wrap: wrap;
+.dw-feature-grid {
+  margin-top: 40px;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
-.dw-person-box {
-  padding: 20px;
-  border: 1px solid #eee;
-  border-radius: 15px;
-  background: #fff;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  transition: 0.3s;
-}
-
-.dw-person-box:hover {
-  transform: translateY(-10px);
-}
-
-.dw-person-box img {
-  width: 280px;
-  height: 350px;
-  object-fit: cover;
+.dw-feature-card {
+  padding: 28px;
+  border-top: 4px solid #c5a021;
   border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.05);
+  text-align: left;
 }
 
-.dw-person-box h3 {
-  margin: 15px 0 5px;
+.dw-feature-card h4 {
+  margin-bottom: 10px;
   color: #630d0d;
   font-family: "Playfair Display", serif;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
-.dw-ampersand {
-  color: #c5a021;
-  font-family: "Dancing Script", cursive;
-  font-size: 5rem;
+.dw-feature-card p {
+  color: #4a4a4a;
+  line-height: 1.65;
 }
 
 .dw-events-section {
@@ -1348,7 +1358,51 @@ body{
   margin-bottom: 10px;
   color: #630d0d;
   font-family: "Playfair Display", serif;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
+}
+
+.dw-property-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+  text-align: left;
+}
+
+.dw-property-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.dw-property-content {
+  padding: 18px;
+}
+
+.dw-property-content h4 {
+  margin-bottom: 8px;
+  color: #630d0d;
+  font-family: "Playfair Display", serif;
+  font-size: 1.45rem;
+}
+
+.dw-property-content p {
+  margin: 0 0 6px 0;
+  color: #555;
+}
+
+.dw-property-price {
+  margin-top: 10px;
+  color: #9b6f00 !important;
+  font-weight: 700;
+  font-size: 1.02rem;
+}
+
+.dw-properties-grid {
+  margin-top: 36px;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 .dw-gallery-grid {
@@ -1372,6 +1426,51 @@ body{
   opacity: 0.9;
 }
 
+.dw-gallery-card {
+  margin: 0;
+  cursor: pointer;
+}
+
+.gallery-item img {
+  display: block;
+}
+
+.dw-enquiry-form {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  text-align: left;
+}
+
+.dw-enquiry-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #2f2f2f;
+  font-weight: 500;
+}
+
+.dw-enquiry-form input,
+.dw-enquiry-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #e2d9be;
+  background: #fff;
+  font: inherit;
+}
+
+.dw-enquiry-full {
+  grid-column: 1 / -1;
+}
+
+.dw-enquiry-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
 .dw-rsvp {
   padding: 100px 20px;
   text-align: center;
@@ -1386,9 +1485,17 @@ body{
   font-size: 3.5rem;
 }
 
+.dw-rsvp-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
 .dw-rsvp-btn {
   display: inline-block;
-  margin-top: 30px;
+  margin-top: 0;
   padding: 15px 45px;
   border-radius: 50px;
   text-transform: uppercase;
@@ -1405,13 +1512,37 @@ body{
   color: #630d0d;
 }
 
+.dw-rsvp-btn-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: transparent;
+}
+
+.dw-rsvp-btn-secondary:hover {
+  border-color: transparent;
+}
+
 @media (max-width: 768px) {
   .dw-hero h1 {
     font-size: 3.5rem;
   }
-  .dw-ampersand {
-    display: block;
-    margin: 10px 0;
+  .dw-hero p {
+    letter-spacing: 3px;
+    font-size: 1.1rem;
+  }
+  .dw-section {
+    padding: 76px 6%;
+  }
+  .dw-section-title {
+    font-size: 2.9rem;
+  }
+  .dw-rsvp h2 {
+    font-size: 2.8rem;
+  }
+  .dw-rsvp-btn {
+    width: min(340px, 100%);
+  }
+  .dw-enquiry-form {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1419,14 +1550,20 @@ body{
    extra small screens (phones < 420px wide)
    ----------------------------------------------- */
 @media (max-width: 420px) {
+  :root {
+    --navbar-height: 60px;
+  }
+
   /* navbar adjustments */
   .navbar {
-    height: 60px;
+    height: var(--navbar-height);
     padding: 0 4%;
   }
   .logo { font-size: 20px; }
   .nav-toggle { width: 36px; height: 28px; }
-  .nav-menu a {
+  .nav-menu a,
+  .nav-menu .nav-link-button,
+  .nav-menu .dropdown-toggle {
     padding: 10px 16px;
     font-size: 13px;
   }
@@ -1447,7 +1584,7 @@ body{
   }
 
   /* reduce video banner height to keep page from becoming too tall */
-  .video-banner { height: calc(70vh - 60px); }
+  .video-banner { height: calc(70vh - var(--navbar-height)); }
 
   /* text size reductions for various headings */
   .intro h2 { font-size: 20px; }
