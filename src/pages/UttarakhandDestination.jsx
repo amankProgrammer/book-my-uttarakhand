@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { uttarakhandDestinations } from '../data/uttarakhandDestinations';
+// icons (requires `npm install react-icons`)
+import { FaMapMarkerAlt, FaCalendarAlt, FaBed, FaStar, FaArrowRight, FaCheckCircle} from 'react-icons/fa';
 
 const INITIAL_VISIBLE_COUNT = 8;
 
 export default function UttarakhandDestination() {
   const [expanded, setExpanded] = useState(false);
-  const [activeDestination, setActiveDestination] = useState(null);
+  const navigate = useNavigate();
 
   const visiblePlaces = expanded
     ? uttarakhandDestinations
@@ -16,6 +19,10 @@ export default function UttarakhandDestination() {
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  };
+
+  const handleDestinationClick = (place) => {
+    navigate(`/uttarakhand-destination/${place.slug}`);
   };
 
   useEffect(() => {
@@ -47,28 +54,6 @@ export default function UttarakhandDestination() {
       window.removeEventListener('hashchange', scrollToHash);
     };
   }, [expanded]);
-
-  useEffect(() => {
-    if (!activeDestination) {
-      return undefined;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-
-    const onKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        setActiveDestination(null);
-      }
-    };
-
-    document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', onKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', onKeyDown);
-    };
-  }, [activeDestination]);
 
   return (
     <div className="destination-page">
@@ -119,7 +104,7 @@ export default function UttarakhandDestination() {
                 <button
                   type="button"
                   className="dest-card-trigger"
-                  onClick={() => setActiveDestination(place)}
+                  onClick={() => handleDestinationClick(place)}
                   aria-label={`Open details for ${place.title}`}
                 >
                   <div className="dest-card-img" style={{ backgroundImage: `url('${place.img}')` }}>
@@ -129,25 +114,35 @@ export default function UttarakhandDestination() {
                   <div className="dest-card-body">
                     <div className="dest-card-head">
                       <h4>{place.title}</h4>
-                      <span className="dest-rating">Rating {place.rating}</span>
+                      <span className="dest-rating">
+                        <FaStar className="rating-icon" /> {place.rating}
+                      </span>
                     </div>
                     <p className="dest-note">{place.note}</p>
 
                     <div className="dest-quick-facts">
-                      <span className="quick-fact">Altitude: {place.altitude}</span>
-                      <span className="quick-fact">Best: {place.bestTime}</span>
-                      <span className="quick-fact">Stay: {place.idealDuration}</span>
+                      <span className="quick-fact">
+                        <FaMapMarkerAlt className="quick-fact-icon" /> Altitude: {place.altitude}
+                      </span>
+                      <span className="quick-fact">
+                        <FaCalendarAlt className="quick-fact-icon" /> {place.bestTime}
+                      </span>
+                      <span className="quick-fact">
+                        <FaBed className="quick-fact-icon" /> {place.idealDuration}
+                      </span>
                     </div>
 
                     <div className="dest-activity-chips">
                       {place.activities.slice(0, 3).map((activity) => (
                         <span key={activity} className="activity-chip">
-                          {activity}
+                          <FaCheckCircle className="activity-icon" /> {activity}
                         </span>
                       ))}
                     </div>
 
-                    <span className="dest-details-link">View full details & activities</span>
+                    <span className="dest-details-link">
+                      View full details & activities <FaArrowRight className="link-icon" />
+                    </span>
                   </div>
                 </button>
               </article>
@@ -161,91 +156,6 @@ export default function UttarakhandDestination() {
           </div>
         </div>
       </section>
-
-      {activeDestination && (
-        <div
-          className="destination-detail-overlay"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={`destination-title-${activeDestination.slug}`}
-          onClick={() => setActiveDestination(null)}
-        >
-          <div className="destination-detail-card" onClick={(event) => event.stopPropagation()}>
-            <button
-              type="button"
-              className="destination-detail-close"
-              aria-label="Close destination details"
-              onClick={() => setActiveDestination(null)}
-            >
-              x
-            </button>
-
-            <div className="destination-detail-hero" style={{ backgroundImage: `url('${activeDestination.img}')` }}>
-              <div className="destination-detail-hero-content">
-                <span className="destination-detail-icon">{activeDestination.icon}</span>
-                <p className="destination-detail-tagline">{activeDestination.tagline}</p>
-                <h3 id={`destination-title-${activeDestination.slug}`}>{activeDestination.title}</h3>
-                <p>{activeDestination.note}</p>
-              </div>
-            </div>
-
-            <div className="destination-detail-body">
-              <p className="destination-overview">{activeDestination.overview}</p>
-
-              <div className="destination-metrics">
-                <div className="metric-item">
-                  <span className="metric-icon">TIME</span>
-                  <div>
-                    <p className="metric-label">Best Time</p>
-                    <p className="metric-value">{activeDestination.bestTime}</p>
-                  </div>
-                </div>
-                <div className="metric-item">
-                  <span className="metric-icon">STAY</span>
-                  <div>
-                    <p className="metric-label">Ideal Stay</p>
-                    <p className="metric-value">{activeDestination.idealDuration}</p>
-                  </div>
-                </div>
-                <div className="metric-item">
-                  <span className="metric-icon">ALT</span>
-                  <div>
-                    <p className="metric-label">Altitude</p>
-                    <p className="metric-value">{activeDestination.altitude}</p>
-                  </div>
-                </div>
-                <div className="metric-item">
-                  <span className="metric-icon">FOR</span>
-                  <div>
-                    <p className="metric-label">Ideal For</p>
-                    <p className="metric-value">{activeDestination.idealFor}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="destination-detail-columns">
-                <section className="detail-column">
-                  <h4>Top Activities</h4>
-                  <ul className="detail-list">
-                    {activeDestination.activities.map((activity) => (
-                      <li key={activity}>- {activity}</li>
-                    ))}
-                  </ul>
-                </section>
-
-                <section className="detail-column">
-                  <h4>Why Travelers Love It</h4>
-                  <ul className="detail-list">
-                    {activeDestination.highlights.map((highlight) => (
-                      <li key={highlight}>- {highlight}</li>
-                    ))}
-                  </ul>
-                </section>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

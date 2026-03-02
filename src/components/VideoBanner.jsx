@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import sunsetbanner from '../assets/videos/sunsetbanner.mp4';
-import banner3 from '../assets/videos/banner3.mp4';
+import nainitalview from '../assets/videos/nainital.mp4';
+import kedarnath from '../assets/videos/kedarnath_view.mp4';
 import tiger2 from '../assets/videos/tiger2.mp4';
-import banner4 from '../assets/videos/banner4.mp4';
 import useSmoothScroll from '../hooks/useSmoothScroll';
 
-const slides = [sunsetbanner, banner3, tiger2, banner4];
+const slides = [sunsetbanner, nainitalview, kedarnath, tiger2];
 const fallbackSlides = [
   'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1920&auto=format&fit=crop',
@@ -15,9 +15,9 @@ const fallbackSlides = [
 
 const contentData = [
   { title: 'Explore Mountains', desc: 'Experience breathtaking travel destinations' },
-  { title: 'Luxury Honeymoon', desc: 'Make your wedding journey unforgettable' },
-  { title: 'Beach Destinations', desc: "Relax at the world's best beaches" },
-  { title: 'Adventure Tours', desc: 'Thrilling trekking and adventure packages' },
+  { title: 'Hill Station Retreats', desc: 'Relax in cool, scenic hill towns and mountain resorts' },
+  { title: 'Spiritual Pilgrimages', desc: 'Visit sacred temples and serene ashrams across Uttarakhand' },
+  { title: 'Adventure Tours', desc: 'Thrilling trekking and adventure packages in the Himalayas' },
 ];
 
 function VideoBanner() {

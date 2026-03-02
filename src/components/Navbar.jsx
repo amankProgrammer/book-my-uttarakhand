@@ -113,7 +113,7 @@ function Navbar() {
               All Destinations
             </Link>
             {uttarakhandDestinations.map((destination) => (
-              <Link key={destination.slug} to={`/uttarakhand-destination#${destination.slug}`} onClick={closeMenu}>
+              <Link key={destination.slug} to={`/uttarakhand-destination/${destination.slug}`} onClick={closeMenu}>
                 {destination.title}
               </Link>
             ))}
