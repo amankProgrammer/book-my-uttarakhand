@@ -72,16 +72,18 @@ iframe {
   position: fixed;
   top: 0;
   width: 100%;
+  max-width: 100vw;
   height: var(--navbar-height);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 6%;
+  padding: 0 16px;
   /* solid background to replace transparent header */
   background: rgba(0,0,0,0.88);
   backdrop-filter: blur(10px); /* subtle blur under header */
   border-bottom: 1px solid rgba(0,0,0,0.08);
   z-index: 1000;
+
 }
 
 /* LOGO */
