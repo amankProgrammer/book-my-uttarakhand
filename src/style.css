@@ -1126,6 +1126,38 @@ iframe {
   gap: 10px;
   margin-top: 12px;
 }
+
+/* Modal & lightbox responsive tweaks */
+@media (max-width: 720px) {
+  .lightbox-inner { max-width: 96%; max-height: 92%; padding: 8px; }
+  .lightbox-img { max-height: 72vh; border-radius: 8px; }
+  .lightbox-close { right: 8px; top: 8px; width: 40px; height: 40px; }
+
+  .modal-card { width: calc(100% - 28px); max-width: 640px; padding: 16px; border-radius: 10px; }
+  .modal { padding: 12px; }
+
+  /* Make large Tour modals occupy the viewport for better readability on mobile */
+  .tour-modal { width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; display: flex; flex-direction: column; }
+  .tour-modal-hero { min-height: 180px; }
+  .tour-modal-content { overflow-y: auto; flex: 1 1 auto; padding-bottom: 88px; }
+  .tour-modal-sticky { display: flex; position: sticky; bottom: 0; z-index: 30; }
+  .tour-modal-close { right: 10px; top: 10px; }
+}
+
+@media (max-width: 420px) {
+  .modal-card { padding: 12px; }
+  .lightbox-img { max-height: 64vh; }
+  .tour-modal-hero { min-height: 140px; }
+  .tour-modal-hero-inner { padding: 18px; }
+  .tour-modal-hero-inner h2 { font-size: clamp(20px, 6vw, 28px); }
+}
+
+/* Footer: ensure stacked layout and readable spacing on narrow screens */
+@media (max-width: 720px) {
+  .site-footer { padding: 22px 12px; }
+  .footer-grid { grid-template-columns: 1fr !important; gap: 16px; }
+  .footer-bottom .container { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
 .sample-weddings .thumb {
   width: 84px;
   height: 64px;
@@ -1644,6 +1676,39 @@ iframe {
   border-radius: 16px;
   background: linear-gradient(160deg, #ffffff, #f0fbf5);
   border: 1px solid rgba(17, 75, 58, 0.15);
+/* Fine-tune hero, gallery and package card sizes for medium and small screens */
+@media (max-width: 980px) {
+  .home-gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .home-gallery-card { min-height: 260px; }
+  .home-gallery-card:nth-child(1), .home-gallery-card:nth-child(4) { min-height: 280px; }
+
+  .package-cards { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+  .pkg-img { height: 160px; }
+
+  .hero-card { min-width: 280px; width: 300px; height: 200px; }
+}
+
+@media (max-width: 720px) {
+  .package-cards { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .pkg-img { height: 140px; }
+  .pkg-body { padding: 12px; }
+
+  .hero-card { width: calc(90vw); min-width: auto; height: auto; }
+  .home-gallery-grid { grid-template-columns: 1fr; }
+  .home-gallery-card, .home-gallery-card:nth-child(1), .home-gallery-card:nth-child(4) { min-height: 220px; }
+}
+
+@media (max-width: 420px) {
+  .package-cards { grid-template-columns: 1fr; gap: 12px; }
+  .pkg-img { height: 120px; }
+  .pkg-body { padding: 10px; }
+
+  .home-gallery-card { min-height: 180px; }
+  .home-gallery-card:nth-child(1), .home-gallery-card:nth-child(4) { min-height: 200px; }
+
+  .hero-card { width: 86vw; min-width: auto; height: auto; }
+  .banner-content h1 { font-size: clamp(1.6rem, 8vw, 2.2rem); }
+}
   box-shadow: 0 12px 24px rgba(11, 61, 46, 0.08);
 }
 

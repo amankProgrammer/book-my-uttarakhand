@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 import useHomeSectionNavigation from '../hooks/useHomeSectionNavigation';
@@ -15,6 +15,9 @@ function Navbar() {
     setOpen(false);
     setOpenDropdown(null);
   };
+
+  const navRef = useRef(null);
+  const toggleRef = useRef(null);
 
   const handleSectionClick = (sectionId) => {
     goToHomeSection(sectionId);
@@ -64,6 +67,21 @@ function Navbar() {
     };
   }, [open]);
 
+  // Close menu when clicking/tapping outside the nav on mobile
+  useEffect(() => {
+    const onPointerDown = (e) => {
+      if (!open) return;
+      const navEl = navRef.current;
+      const toggleEl = toggleRef.current;
+      if (!navEl) return;
+      if (navEl.contains(e.target) || (toggleEl && toggleEl.contains(e.target))) return;
+      closeMenu();
+    };
+
+    window.addEventListener('pointerdown', onPointerDown);
+    return () => window.removeEventListener('pointerdown', onPointerDown);
+  }, [open]);
+
   return (
     <header className="navbar">
       <Link
@@ -78,6 +96,7 @@ function Navbar() {
         <span className="logo-text">Book our <span>Uttarakhand</span></span>
       </Link>
       <button
+        ref={toggleRef}
         className="nav-toggle"
         type="button"
         aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
@@ -95,7 +114,7 @@ function Navbar() {
         <span />
         <span />
       </button>
-      <nav id="primary-navigation" className={open ? 'nav-menu nav-menu-open' : 'nav-menu'}>
+      <nav ref={navRef} id="primary-navigation" className={open ? 'nav-menu nav-menu-open' : 'nav-menu'}>
         <button type="button" className="nav-link-button" onClick={() => handleSectionClick('home')}>
           Home
         </button>
