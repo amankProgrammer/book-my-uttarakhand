@@ -92,7 +92,8 @@ body{
 
 .logo img {
   display: block;
-  height: 100px;
+  height: calc(var(--navbar-height) - 12px);
+  max-height: 68px;
   width: auto;
   filter: brightness(0) invert(1) ;
   
@@ -113,7 +114,7 @@ body{
 
 @media (max-width: 420px) {
   .logo img {
-    height: 12dvh;
+    height: calc(var(--navbar-height) - 12px);
     
   }
   .logo-text {
@@ -1815,8 +1816,8 @@ body{
 
 /* Destination wedding showcase */
 .dw-hero {
-  height: calc(100vh - 80px);
-  margin-top: 80px;
+  height: calc(100dvh - var(--navbar-height));
+  margin-top: var(--navbar-height);
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
@@ -1828,6 +1829,12 @@ body{
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)),
     url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070')
       center / cover no-repeat fixed;
+}
+
+@media (max-width: 980px) {
+  .dw-hero {
+    background-attachment: scroll;
+  }
 }
 
 .dw-hero::after {
