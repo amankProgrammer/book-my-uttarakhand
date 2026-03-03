@@ -99,27 +99,29 @@ iframe {
   cursor: pointer;
   user-select: none;
   letter-spacing: 0.2px;
-  
+  text-decoration: none;
+  gap: 8px;
 }
 
 .logo img {
   display: block;
-  height: calc(var(--navbar-height) - 12px);
-  max-height: 68px;
+  height: 65px;
   width: auto;
-  filter: brightness(0) invert(1) ;
-  
+  filter: brightness(0) invert(1);
 }
 
 .logo-text {
-  font-size: 18px;
+  font-size: 16px;
   font-family: var(--font-cursive);
   font-weight: 400;
   white-space: nowrap;
+  text-decoration: none;
+  color: white;
 }
 
 .logo-text span {
   color: var(--accent);
+  font-size: 20px;
   font-family:"Dancing Script";
   font-weight: 800;
 }
@@ -173,7 +175,7 @@ iframe {
   color: white;
   text-decoration: none;
   padding: 12px 22px;
-  transition: 0.25s ease;
+  transition: color 0.25s ease;
   white-space: nowrap;
   font-size: 14px;
   display: block;
@@ -183,6 +185,44 @@ iframe {
   font-family: inherit;
   text-align: left;
   line-height: 1.2;
+  position: relative;
+}
+
+/* underline animation */
+.nav-menu a::after,
+.nav-menu .nav-link-button::after,
+.nav-menu .dropdown-toggle::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.nav-menu a:hover::after,
+.nav-menu .nav-link-button:hover::after,
+.nav-menu .dropdown-toggle:hover::after,
+.nav-menu a.active::after,
+.nav-menu .nav-link-button.active::after,
+.nav-menu .dropdown-toggle.active::after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-menu a:hover,
+.nav-menu .nav-link-button:hover,
+.nav-menu .dropdown-toggle:hover {
+  color: var(--accent);
+}
+
+/* active link styling */
+.nav-menu a.active,
+.nav-menu .nav-link-button.active,
+.nav-menu .dropdown-toggle.active {
+  color: var(--accent);
 }
 
 .nav-menu a:hover,

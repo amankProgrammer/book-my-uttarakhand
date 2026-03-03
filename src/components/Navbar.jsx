@@ -115,13 +115,18 @@ function Navbar() {
         <span />
       </button>
       <nav ref={navRef} id="primary-navigation" className={open ? 'nav-menu nav-menu-open' : 'nav-menu'}>
-        <button type="button" className="nav-link-button" onClick={() => handleSectionClick('home')}>
-          Home
-        </button>
+        <button
+        type="button"
+        className={"nav-link-button" + (location.pathname === '/' ? ' active' : '')}
+        onClick={() => handleSectionClick('home')}
+      >
+        Home
+      </button>
+        {/** active state for dropdowns based on current path */}
         <div className={openDropdown === 'destinations' ? 'dropdown dropdown-open' : 'dropdown'}>
           <button
             type="button"
-            className="dropdown-toggle"
+            className={"dropdown-toggle" + (location.pathname.startsWith('/uttarakhand-destination') ? ' active' : '')}
             aria-haspopup="true"
             aria-expanded={openDropdown === 'destinations'}
             onClick={toggleDropdown('destinations')}
@@ -142,7 +147,7 @@ function Navbar() {
         <div className={openDropdown === 'packages' ? 'dropdown dropdown-open' : 'dropdown'}>
           <button
             type="button"
-            className="dropdown-toggle"
+            className={"dropdown-toggle" + (location.pathname.startsWith('/tour-packages') ? ' active' : '')}
             aria-haspopup="true"
             aria-expanded={openDropdown === 'packages'}
             onClick={toggleDropdown('packages')}
@@ -161,16 +166,24 @@ function Navbar() {
             ))}
           </div>
         </div>
-        <Link to="/hotels-resorts" onClick={closeMenu}>
+        <Link
+          to="/hotels-resorts"
+          onClick={closeMenu}
+          className={location.pathname === '/hotels-resorts' ? 'active' : ''}
+        >
           Hotels/Resort
         </Link>
-        <Link to="/gallery" onClick={closeMenu}>
+        <Link
+          to="/gallery"
+          onClick={closeMenu}
+          className={location.pathname === '/gallery' ? 'active' : ''}
+        >
           Gallery
         </Link>
         <div className={openDropdown === 'wedding' ? 'dropdown dropdown-open' : 'dropdown'}>
           <button
             type="button"
-            className="dropdown-toggle"
+            className={"dropdown-toggle" + (location.pathname.startsWith('/destination-wedding') ? ' active' : '')}
             aria-haspopup="true"
             aria-expanded={openDropdown === 'wedding'}
             onClick={toggleDropdown('wedding')}
@@ -192,7 +205,7 @@ function Navbar() {
         <div className={openDropdown === 'support' ? 'dropdown dropdown-open' : 'dropdown'}>
           <button
             type="button"
-            className="dropdown-toggle"
+            className={"dropdown-toggle" + ((location.pathname === '/' && location.hash.includes('faqs')) ? ' active' : '')}
             aria-haspopup="true"
             aria-expanded={openDropdown === 'support'}
             onClick={toggleDropdown('support')}
@@ -211,7 +224,11 @@ function Navbar() {
             </a>
           </div>
         </div>
-        <Link to="/contact" onClick={closeMenu}>
+        <Link
+          to="/contact"
+          onClick={closeMenu}
+          className={location.pathname === '/contact' ? 'active' : ''}
+        >
           Contact
         </Link>
       </nav>
