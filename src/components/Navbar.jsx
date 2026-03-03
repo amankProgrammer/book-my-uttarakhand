@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 import useHomeSectionNavigation from '../hooks/useHomeSectionNavigation';
 import { uttarakhandDestinations } from '../data/uttarakhandDestinations';
+import { tourPackageCategories } from '../data/tourPackageCategories';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -130,15 +131,15 @@ function Navbar() {
             Tour Packages
           </button>
           <div className="dropdown-menu">
-            <Link to="/tour-packages" onClick={closeMenu}>
-              Family Package
-            </Link>
-            <Link to="/tour-packages" onClick={closeMenu}>
-              Luxury Package
-            </Link>
-            <Link to="/tour-packages" onClick={closeMenu}>
-              Budget Package
-            </Link>
+            {tourPackageCategories.map((cat) => (
+              <Link
+                key={cat.slug}
+                to={cat.slug === 'all' ? '/tour-packages' : `/tour-packages?category=${encodeURIComponent(cat.slug)}`}
+                onClick={closeMenu}
+              >
+                {cat.navLabel}
+              </Link>
+            ))}
           </div>
         </div>
         <Link to="/hotels-resorts" onClick={closeMenu}>
@@ -183,7 +184,7 @@ function Navbar() {
             <a href="mailto:info@example.com" onClick={closeMenu}>
               Help Center
             </a>
-            <button type="button" onClick={() => handleSectionClick('best-time')}>
+            <button type="button" className="nav-link-button" onClick={() => handleSectionClick('faqs')}>
               FAQs
             </button>
             <a href="tel:+919876543210" onClick={closeMenu}>
@@ -191,13 +192,12 @@ function Navbar() {
             </a>
           </div>
         </div>
-        <button type="button" className="nav-link-button" onClick={() => handleSectionClick('enquiry')}>
+        <Link to="/contact" onClick={closeMenu}>
           Contact
-        </button>
+        </Link>
       </nav>
     </header>
   );
 }
 
 export default Navbar;
-

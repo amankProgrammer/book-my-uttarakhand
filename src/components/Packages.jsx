@@ -53,7 +53,7 @@ export default function Packages() {
         <div className="package-cards">
           {travelStyles.map((style) => (
             <article className="pkg-card" key={style.title}>
-              <div className="pkg-img" style={{ backgroundImage: `url('${style.image}')` }} aria-hidden="true" />
+              <div className="pkg-img" style={{ backgroundImage: style.image ? `url(${style.image})` : undefined }} aria-hidden="true" />
               <div className="pkg-body">
                 <h4>{style.title}</h4>
                 <p>{style.summary}</p>

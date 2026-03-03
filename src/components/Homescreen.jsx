@@ -7,6 +7,7 @@ import Packages from './Packages';
 import WhyChoose from './WhyChoose';
 import About from './About';
 import BestTime from './BestTime';
+import HomeFaq from './HomeFaq';
 import EnquirySection from './EnquirySection';
 import { consumePendingHomeScroll, scrollToSection } from '../hooks/useHomeSectionNavigation';
 
@@ -30,6 +31,7 @@ export default function Homescreen() {
       <WhyChoose />
       <About />
       <BestTime />
+      <HomeFaq />
       <EnquirySection />
     </main>
   );
