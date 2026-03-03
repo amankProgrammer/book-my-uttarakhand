@@ -153,8 +153,27 @@
 .destination-hero-content {
   position: relative;
   z-index: 2;
+  /* cap at 920px but never grow past most of the viewport */
   width: min(920px, 92vw);
+  max-width: 100%; /* ensure the element never overflows due to padding */
   padding: 0 18px;
+}
+
+/* make hero content even more fluid on narrow phones */
+@media (max-width: 720px) {
+  .packages-hero-content,
+  .destination-hero-content {
+    width: 90vw;
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 520px) {
+  .packages-hero-content,
+  .destination-hero-content {
+    width: 96vw;
+    padding: 0 8px;
+  }
 }
 
 .packages-hero-kicker,
@@ -206,6 +225,21 @@
   transform: translateX(-50%);
   cursor: pointer;
   animation: heroBounce 2s ease-in-out infinite;
+}
+
+/* Ensure the hero search sits above the scroll indicator on small screens */
+.tours-hero-search {
+  position: relative;
+  z-index: 5;
+}
+
+/* On narrow viewports the scroll indicator should sit lower to avoid overlapping hero controls */
+@media (max-width: 520px) {
+  .packages-hero-scroll-indicator,
+  .destination-hero-scroll-indicator {
+    bottom: 8px;
+    z-index: 2; /* keep it below the search which is now z-index:5 */
+  }
 }
 
 .packages-hero-scroll-indicator span,
