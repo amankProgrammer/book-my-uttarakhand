@@ -3791,6 +3791,18 @@
   }
 }
 
+@media (max-width: 520px) {
+  .contact-hero-actions a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .contact-panel,
+  .contact-form-card {
+    padding: 18px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hotel-card,
   .hotel-card img,
