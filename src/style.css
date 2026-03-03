@@ -1522,6 +1522,12 @@ iframe {
   background-position: center;
   background-repeat: no-repeat;
 }
+@media (max-width: 600px) {
+  .footer-top {
+    background-size: cover;
+    background-position: top;
+  }
+}
 
 .footer-grid{
   display:grid;
