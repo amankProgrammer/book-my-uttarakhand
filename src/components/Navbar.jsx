@@ -4,12 +4,28 @@ import logo from '../assets/images/logo.png';
 import useHomeSectionNavigation from '../hooks/useHomeSectionNavigation';
 import { uttarakhandDestinations } from '../data/uttarakhandDestinations';
 import { tourPackageCategories } from '../data/tourPackageCategories';
+import useCmsCollection from '../hooks/useCmsCollection';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const location = useLocation();
   const goToHomeSection = useHomeSectionNavigation();
+
+  const { items: contactItems } = useCmsCollection('contact');
+  const contactInfo = React.useMemo(() => {
+    const info = {
+      phone: '+91 98765 43210',
+      email: 'info@example.com',
+    };
+    contactItems.forEach(item => {
+      const type = (item.type || '').toLowerCase();
+      const val = item.value || '';
+      if (type.includes('phone') || type === 'call') info.phone = val;
+      if (type.includes('email')) info.email = val;
+    });
+    return info;
+  }, [contactItems]);
 
   const closeMenu = () => {
     setOpen(false);
@@ -213,13 +229,13 @@ function Navbar() {
             Support
           </button>
           <div className="dropdown-menu">
-            <a href="mailto:info@example.com" onClick={closeMenu}>
+            <a href={`mailto:${contactInfo.email}`} onClick={closeMenu}>
               Help Center
             </a>
             <button type="button" className="nav-link-button" onClick={() => handleSectionClick('faqs')}>
               FAQs
             </button>
-            <a href="tel:+919876543210" onClick={closeMenu}>
+            <a href={`tel:${contactInfo.phone}`} onClick={closeMenu}>
               Customer Care
             </a>
           </div>

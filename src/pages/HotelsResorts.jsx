@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import useCmsCollection from '../hooks/useCmsCollection';
 
-const packageImages = [
+export const defaultHotelImages = [
   'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1200&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200&auto=format&fit=crop',
@@ -13,73 +14,87 @@ const packageImages = [
 
 const createHotel = (
   name,
+  location,
   price,
-  nights = 2,
-  days = 3,
-  imageIndex = 0,
-  amenities = ['wifi', 'pool', 'spa', 'breakfast']
+  facilities = ['wifi', 'pool', 'spa', 'breakfast'],
+  imageIndex = 0
 ) => ({
   name,
+  location,
   price,
-  nights,
-  days,
-  img: packageImages[imageIndex % packageImages.length],
-  amenities,
+  facilities: facilities.join('\n'), // Admin schema requires text lines
+  imageUrl: defaultHotelImages[imageIndex % defaultHotelImages.length],
 });
+
+export const defaultFlatHotels = [
+  createHotel('Amrais Green', 'Jim Corbett', '15,000', ['wifi', 'pool', 'spa', 'breakfast'], 0),
+  createHotel('Maulik Mansion', 'Jim Corbett', '16,500', ['wifi', 'parking', 'breakfast', 'mountain-view'], 1),
+  createHotel('The Corbett Silva', 'Jim Corbett', '17,999', ['wifi', 'pool', 'parking', 'bonfire'], 2),
+  createHotel('Vasavana Resort', 'Jim Corbett', '21,000', ['wifi', 'spa', 'breakfast', 'dj-night'], 3),
+  createHotel('Maya the Forest Resort', 'Jim Corbett', '18,500', ['wifi', 'pool', 'spa', 'breakfast'], 4),
+  createHotel('Dee Fellows', 'Jim Corbett', '14,500', ['wifi', 'parking', 'spa', 'mountain-view'], 5),
+  createHotel('La Perle', 'Jim Corbett', '19,500', ['wifi', 'pool', 'breakfast', 'bonfire'], 6),
+  createHotel('Banyan Retreat', 'Jim Corbett', '22,000', ['wifi', 'pool', 'spa', 'breakfast'], 7),
+  createHotel('Corbett Tusker Trail', 'Jim Corbett', '16,999', ['wifi', 'spa', 'parking', 'bonfire'], 0),
+  createHotel('Corbett Grace', 'Jim Corbett', '15,999', ['wifi', 'pool', 'breakfast', 'dj-night'], 1),
+
+  createHotel('Cedar wood', 'Nainital', '12,999', ['wifi', 'parking', 'breakfast', 'mountain-view'], 2),
+  createHotel('Aroma', 'Nainital', '13,500', ['wifi', 'pool', 'spa', 'breakfast'], 3),
+  createHotel('Manu Maharani Regency', 'Nainital', '20,000', ['wifi', 'pool', 'spa', 'breakfast'], 4),
+  createHotel('Royal heritage resort', 'Nainital', '17,500', ['wifi', 'pool', 'breakfast', 'dj-night'], 5),
+  createHotel('The Palace Belvedere', 'Nainital', '23,500', ['wifi', 'spa', 'parking', 'mountain-view'], 6),
+
+  createHotel('The Mountain Paradise', 'Almora', '11,500', ['wifi', 'pool', 'spa', 'breakfast'], 7),
+
+  createHotel('Nature valley', 'Kausani', '10,999', ['wifi', 'pool', 'spa', 'breakfast'], 0),
+  createHotel('Kasauni inn', 'Kausani', '12,499', ['wifi', 'pool', 'spa', 'breakfast'], 1),
+  createHotel('Kasauni Regency Resort', 'Kausani', '14,999', ['wifi', 'pool', 'spa', 'breakfast'], 2),
+
+  createHotel('Pool Retreat Ranikhet', 'Ranikhet', '13,999', ['wifi', 'pool', 'spa', 'breakfast'], 3),
+  createHotel('Colonels Paradise', 'Ranikhet', '12,999', ['wifi', 'breakfast', 'parking', 'bonfire'], 4),
+
+  createHotel('Wild Sping', 'Mussoorie', '14,500', ['wifi', 'pool', 'spa', 'breakfast'], 5),
+  createHotel('Shining Hills', 'Mussoorie', '15,500', ['wifi', 'pool', 'spa', 'breakfast'], 6),
+  createHotel('MV Acosta', 'Mussoorie', '19,000', ['wifi', 'pool', 'spa', 'breakfast'], 7),
+  createHotel('Solitaire Resort', 'Mussoorie', '21,500', ['wifi', 'pool', 'spa', 'dj-night'], 0),
+];
 
 const data = [
   {
     title: 'Jim Corbett',
-    hotels: [
-      createHotel('Amrais Green', '15,000', 2, 3, 0),
-      createHotel('Maulik Mansion', '16,500', 2, 3, 1, ['wifi', 'parking', 'breakfast', 'mountain-view']),
-      createHotel('The Corbett Silva', '17,999', 3, 4, 2, ['wifi', 'pool', 'parking', 'bonfire']),
-      createHotel('Vasavana Resort', '21,000', 2, 3, 3, ['wifi', 'spa', 'breakfast', 'dj-night']),
-      createHotel('Maya the Forest Resort', '18,500', 2, 3, 4),
-      createHotel('Dee Fellows', '14,500', 2, 3, 5, ['wifi', 'parking', 'spa', 'mountain-view']),
-      createHotel('La Perle', '19,500', 3, 4, 6, ['wifi', 'pool', 'breakfast', 'bonfire']),
-      createHotel('Banyan Retreat', '22,000', 2, 3, 7),
-      createHotel('Corbett Tusker Trail', '16,999', 2, 3, 0, ['wifi', 'spa', 'parking', 'bonfire']),
-      createHotel('Corbett Grace', '15,999', 2, 3, 1, ['wifi', 'pool', 'breakfast', 'dj-night']),
-    ],
+    hotels: defaultFlatHotels.filter(h => h.location === 'Jim Corbett').map(h => ({
+      name: h.name, price: h.price, nights: 2, days: 3, img: h.imageUrl, amenities: h.facilities.split('\n')
+    }))
   },
   {
     title: 'Nainital',
-    hotels: [
-      createHotel('Cedar wood', '12,999', 2, 3, 2, ['wifi', 'parking', 'breakfast', 'mountain-view']),
-      createHotel('Aroma', '13,500', 2, 3, 3),
-      createHotel('Manu Maharani Regency', '20,000', 3, 4, 4),
-      createHotel('Royal heritage resort', '17,500', 2, 3, 5, ['wifi', 'pool', 'breakfast', 'dj-night']),
-      createHotel('The Palace Belvedere', '23,500', 3, 4, 6, ['wifi', 'spa', 'parking', 'mountain-view']),
-    ],
+    hotels: defaultFlatHotels.filter(h => h.location === 'Nainital').map(h => ({
+      name: h.name, price: h.price, nights: 2, days: 3, img: h.imageUrl, amenities: h.facilities.split('\n')
+    }))
   },
   {
     title: 'Almora',
-    hotels: [createHotel('The Mountain Paradise', '11,500', 2, 3, 7)],
+    hotels: defaultFlatHotels.filter(h => h.location === 'Almora').map(h => ({
+      name: h.name, price: h.price, nights: 2, days: 3, img: h.imageUrl, amenities: h.facilities.split('\n')
+    }))
   },
   {
     title: 'Kausani',
-    hotels: [
-      createHotel('Nature valley', '10,999', 2, 3, 0),
-      createHotel('Kasauni inn', '12,499', 2, 3, 1),
-      createHotel('Kasauni Regency Resort', '14,999', 2, 3, 2),
-    ],
+    hotels: defaultFlatHotels.filter(h => h.location === 'Kausani').map(h => ({
+      name: h.name, price: h.price, nights: 2, days: 3, img: h.imageUrl, amenities: h.facilities.split('\n')
+    }))
   },
   {
     title: 'Ranikhet',
-    hotels: [
-      createHotel('Pool Retreat Ranikhet', '13,999', 2, 3, 3),
-      createHotel('Colonels Paradise', '12,999', 2, 3, 4, ['wifi', 'breakfast', 'parking', 'bonfire']),
-    ],
+    hotels: defaultFlatHotels.filter(h => h.location === 'Ranikhet').map(h => ({
+      name: h.name, price: h.price, nights: 2, days: 3, img: h.imageUrl, amenities: h.facilities.split('\n')
+    }))
   },
   {
     title: 'Mussoorie',
-    hotels: [
-      createHotel('Wild Sping', '14,500', 2, 3, 5),
-      createHotel('Shining Hills', '15,500', 2, 3, 6),
-      createHotel('MV Acosta', '19,000', 3, 4, 7),
-      createHotel('Solitaire Resort', '21,500', 3, 4, 0, ['wifi', 'pool', 'spa', 'dj-night']),
-    ],
+    hotels: defaultFlatHotels.filter(h => h.location === 'Mussoorie').map(h => ({
+      name: h.name, price: h.price, nights: 2, days: 3, img: h.imageUrl, amenities: h.facilities.split('\n')
+    }))
   },
 ];
 
@@ -100,6 +115,41 @@ const amenityMap = {
 
 export default function HotelsResorts() {
   const [modalSrc, setModalSrc] = useState('');
+  
+  const { items: cmsItems } = useCmsCollection('hotels');
+
+  const groupedData = useMemo(() => {
+    if (cmsItems.length === 0) return data; // Use static default if no data in CMS
+    
+    // Group CMS hotels by location
+    const map = new Map();
+    cmsItems.forEach((item) => {
+      const loc = item.location || 'Other';
+      if (!map.has(loc)) {
+        map.set(loc, { title: loc, hotels: [] });
+      }
+      // Ensure facilities is an array regardless of how it was seeded
+      let amenitiesArray = ['wifi', 'breakfast'];
+      if (Array.isArray(item.facilities)) {
+        amenitiesArray = item.facilities;
+      } else if (typeof item.facilities === 'string') {
+        amenitiesArray = item.facilities.split('\n').map(s => s.trim()).filter(Boolean);
+      } else if (item.amenities) { // Fallback for old schema if any
+        amenitiesArray = Array.isArray(item.amenities) ? item.amenities : [item.amenities];
+      }
+
+      map.get(loc).hotels.push({
+        name: item.name,
+        price: item.price,
+        nights: 2, // Not currently explicitly in CMS schema, using reasonable default
+        days: 3, 
+        img: item.imageUrl || item.image || item.img || defaultHotelImages[0],
+        amenities: amenitiesArray,
+      });
+    });
+    return Array.from(map.values());
+  }, [cmsItems]);
+
   const scrollToCatalog = () => {
     const target = document.getElementById('hotels-catalog');
     if (target) {
@@ -142,7 +192,7 @@ export default function HotelsResorts() {
           Choose the best stay options across Uttarakhand
         </p>
 
-        {data.map((d) => (
+        {groupedData.map((d) => (
           <div key={d.title} className="destination-block">
             <h3 className="destination-heading">{d.title}</h3>
             <div className="hotels-grid">

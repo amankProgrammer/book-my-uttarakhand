@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { uttarakhandDestinations } from '../data/uttarakhandDestinations';
+import { uttarakhandDestinations as defaultDestinations } from '../data/uttarakhandDestinations';
+import useCmsCollection from '../hooks/useCmsCollection';
 // icons (requires `npm install react-icons`)
 import { FaMapMarkerAlt, FaCalendarAlt, FaBed, FaStar, FaArrowRight, FaCheckCircle} from 'react-icons/fa';
 
@@ -9,6 +10,9 @@ const INITIAL_VISIBLE_COUNT = 8;
 export default function UttarakhandDestination() {
   const [expanded, setExpanded] = useState(false);
   const navigate = useNavigate();
+
+  const { items: cmsItems } = useCmsCollection('destinations');
+  const uttarakhandDestinations = cmsItems.length > 0 ? cmsItems : defaultDestinations;
 
   const visiblePlaces = expanded
     ? uttarakhandDestinations
@@ -33,7 +37,7 @@ export default function UttarakhandDestination() {
         return;
       }
 
-      const targetIndex = uttarakhandDestinations.findIndex((destination) => destination.slug === hash);
+      const targetIndex = uttarakhandDestinations.findIndex((destination) => destination.slug === hash || destination.id === hash);
 
       if (targetIndex >= INITIAL_VISIBLE_COUNT && !expanded) {
         setExpanded(true);

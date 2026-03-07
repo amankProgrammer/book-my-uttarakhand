@@ -9,7 +9,8 @@ import {
   FaStar,
   FaWhatsapp,
 } from 'react-icons/fa';
-import { uttarakhandTourPackages } from '../data/uttarakhandTourPackages';
+import { uttarakhandTourPackages as defaultPackages } from '../data/uttarakhandTourPackages';
+import useCmsCollection from '../hooks/useCmsCollection';
 
 const INR = new Intl.NumberFormat('en-IN');
 
@@ -170,12 +171,18 @@ export default function TourPackageDetail() {
   const enquiryRef = useRef(null);
   const dhamsRef = useRef(null);
 
-  const pkg = useMemo(() => uttarakhandTourPackages.find((p) => p.id === id) ?? null, [id]);
+  const { items: cmsItems } = useCmsCollection('packages');
+  const uttarakhandTourPackages = cmsItems.length > 0 ? cmsItems : defaultPackages;
+
+  const pkg = useMemo(() => uttarakhandTourPackages.find((p) => p.id === id || p.slug === id) ?? null, [uttarakhandTourPackages, id]);
   const itineraryDays = useMemo(() => (pkg ? buildItineraryDays(pkg) : []), [pkg]);
   const similar = useMemo(() => {
     if (!pkg) return [];
-    return uttarakhandTourPackages.filter((p) => p.category === pkg.category && p.id !== pkg.id).slice(0, 3);
-  }, [pkg]);
+    return uttarakhandTourPackages.filter((p) => p.category === pkg.category && p.id !== pkg.id && p.slug !== pkg.slug).slice(0, 3);
+  }, [pkg, uttarakhandTourPackages]);
+
+  const { items: cmsTestimonials } = useCmsCollection('testimonials');
+  const displayTestimonials = cmsTestimonials.length > 0 ? cmsTestimonials : REVIEWS;
 
   const [activeDay, setActiveDay] = useState(0);
   const [selectedTier, setSelectedTier] = useState(null);
@@ -199,9 +206,9 @@ export default function TourPackageDetail() {
   }, [pkg]);
 
   useEffect(() => {
-    const timer = window.setInterval(() => setReviewIndex((i) => (i + 1) % REVIEWS.length), 5200);
+    const timer = window.setInterval(() => setReviewIndex((i) => (i + 1) % displayTestimonials.length), 5200);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [displayTestimonials.length]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -607,14 +614,14 @@ export default function TourPackageDetail() {
           <h2>Reviews</h2>
           <div className="package-review">
             <div className="package-review-top">
-              <strong>{REVIEWS[reviewIndex].name}</strong>
-              <Stars value={REVIEWS[reviewIndex].rating} />
+              <strong>{displayTestimonials[reviewIndex]?.name}</strong>
+              <Stars value={displayTestimonials[reviewIndex]?.rating || 5} />
             </div>
-            <p>{REVIEWS[reviewIndex].text}</p>
+            <p>{displayTestimonials[reviewIndex]?.text}</p>
             <div className="tours-testimonial-dots" aria-label="Select review">
-              {REVIEWS.map((t, idx) => (
+              {displayTestimonials.map((t, idx) => (
                 <button
-                  key={t.name}
+                  key={t.name || idx}
                   type="button"
                   className={idx === reviewIndex ? 'tours-dot active' : 'tours-dot'}
                   onClick={() => setReviewIndex(idx)}

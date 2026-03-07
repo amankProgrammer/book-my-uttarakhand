@@ -1,10 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import useHomeSectionNavigation from '../hooks/useHomeSectionNavigation';
-import { homeGalleryHighlights } from '../data/galleryItems';
+import { homeGalleryHighlights as defaultHomeGalleryHighlights } from '../data/galleryItems';
+import useCmsCollection from '../hooks/useCmsCollection';
 
 export default function HomeGallery() {
   const goToHomeSection = useHomeSectionNavigation();
+
+  const { items: cmsItems } = useCmsCollection('gallery');
+  const homeGalleryHighlights = cmsItems.length > 0 ? cmsItems.slice(0, 6) : defaultHomeGalleryHighlights;
 
   return (
     <section className="home-gallery" data-reveal>

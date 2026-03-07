@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { uttarakhandDestinations } from '../data/uttarakhandDestinations';
+import { uttarakhandDestinations as defaultDestinations } from '../data/uttarakhandDestinations';
+import useCmsCollection from '../hooks/useCmsCollection';
 import './destination-detail.css';
 // icons for detail page (install react-icons)
 import { FaArrowLeft, FaMapMarkerAlt, FaCalendarAlt, FaHotel, FaUsers, FaStar, FaCheckCircle, FaSuitcaseRolling } from 'react-icons/fa';
@@ -111,6 +112,9 @@ export default function DestinationDetail() {
   const [gallery, setGallery] = useState([]);
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0);
 
+  const { items: cmsItems } = useCmsCollection('destinations');
+  const uttarakhandDestinations = cmsItems.length > 0 ? cmsItems : defaultDestinations;
+
   // helper to scroll to the enquiry form section
   const scrollToForm = () => {
     const el = document.getElementById('enquiry-form');
@@ -120,8 +124,8 @@ export default function DestinationDetail() {
   };
 
   useEffect(() => {
-    // Find destination by slug
-    const dest = uttarakhandDestinations.find((d) => d.slug === slug);
+    // Find destination by slug or id
+    const dest = uttarakhandDestinations.find((d) => d.slug === slug || d.id === slug);
     if (dest) {
       setDestination(dest);
       setPackages(getPackagesForDestination(slug));

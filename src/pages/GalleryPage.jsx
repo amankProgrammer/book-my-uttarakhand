@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { galleryItems } from '../data/galleryItems';
+import { galleryItems as defaultGalleryItems } from '../data/galleryItems';
+import useCmsCollection from '../hooks/useCmsCollection';
 import './gallery.css';
 
 const filterOptions = [
@@ -13,6 +14,9 @@ const filterOptions = [
 export default function GalleryPage() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [lightboxItem, setLightboxItem] = useState(null);
+
+  const { items: cmsItems } = useCmsCollection('gallery');
+  const galleryItems = cmsItems.length > 0 ? cmsItems : defaultGalleryItems;
 
   const visibleItems = useMemo(() => {
     if (activeFilter === 'all') return galleryItems;

@@ -17,6 +17,7 @@ import DestinationDetail from './pages/DestinationDetail';
 import DestinationWedding from './pages/DestinationWedding';
 import GalleryPage from './pages/GalleryPage';
 import ContactPage from './pages/ContactPage';
+import AdminPage from './pages/admin/AdminPage';
 import useScrollReveal from './hooks/useScrollReveal';
 
 function Layout() {
@@ -53,6 +54,10 @@ const router = createBrowserRouter(
         { path: '/gallery', element: <GalleryPage /> },
         { path: '/contact', element: <ContactPage /> },
       ],
+    },
+    {
+      path: '/admin',
+      element: <AdminPage />,
     },
   ],
   {

@@ -1,0 +1,41 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Keep in sync with `firestore.rules`.
+    function bootstrapAdminEmails() {
+      return ["admin@gmail.com"];
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isBootstrapAdmin() {
+      return isSignedIn() && (request.auth.token.email in bootstrapAdminEmails());
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        isBootstrapAdmin() ||
+        firestore.exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    match /cms/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /images/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}
+

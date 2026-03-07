@@ -1,42 +1,13 @@
 import React, { useRef } from 'react';
 import useAutoScroll from '../hooks/useAutoScroll';
-
-const items = [
-  {
-    title: 'Nainital',
-    description: 'The Lake District - boating, Mall Road, cable car rides and romantic sunsets.',
-    image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1400&auto=format&fit=crop',
-  },
-  {
-    title: 'Jim Corbett National Park',
-    description: 'Jeep safaris, bird watching, and rich biodiversity - perfect for wildlife lovers.',
-    image: 'https://images.unsplash.com/photo-1474511320723-9a56873867b5?q=80&w=1400&auto=format&fit=crop',
-  },
-  {
-    title: 'Ranikhet',
-    description: 'Lush green forests, serene Himalayan views and a peaceful retreat.',
-    image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1400&auto=format&fit=crop',
-  },
-  {
-    title: 'Almora',
-    description: 'Cultural heritage, ancient temples and the vibrant Kumaoni culture.',
-    image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1400&auto=format&fit=crop',
-  },
-  {
-    title: 'Mukteshwar',
-    description: 'Trekking, rock climbing and breathtaking Himalayan panoramas.',
-    image: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?q=80&w=1400&auto=format&fit=crop',
-  },
-  {
-    title: 'Bhimtal',
-    description: 'Peaceful lake escapes with boating, island aquarium and nature walks.',
-    image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop',
-  },
-];
+import useCmsCollection from '../hooks/useCmsCollection';
+import { defaultHomeDestinations } from '../cms/defaultContent';
 
 export default function Destinations() {
   const rowRef = useRef(null);
   useAutoScroll(rowRef, 60);
+  const { items: cmsItems } = useCmsCollection('homeDestinations');
+  const items = cmsItems.length ? cmsItems : defaultHomeDestinations;
 
   return (
     <section className="destinations" id="destinations" data-reveal>
@@ -46,9 +17,9 @@ export default function Destinations() {
           {items.map((item, idx) => (
             <article
               className="hero-card"
-              style={{ backgroundImage: `url('${item.image}')` }}
+              style={{ backgroundImage: `url('${item.imageUrl || item.image || ''}')` }}
               aria-label={item.title}
-              key={idx}
+              key={item.id || item.title || idx}
             >
               <div className="card-overlay">
                 <h4>{item.title}</h4>

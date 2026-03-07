@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useCmsCollection from '../hooks/useCmsCollection';
 import { FaArrowLeft, FaEnvelope, FaMapMarkerAlt, FaPhoneAlt, FaWhatsapp } from 'react-icons/fa';
 
 const initialForm = { name: '', phone: '', email: '', message: '' };
@@ -23,6 +24,31 @@ export default function ContactPage() {
   const [formData, setFormData] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle');
+
+  const { items: contactItems } = useCmsCollection('contact');
+
+  // Convert key/value CMS array to an easy lookup object. Defaults provided.
+  const contactInfo = useMemo(() => {
+    const info = {
+      phone: '+91 98765 43210',
+      whatsapp: '919876543210',
+      email: 'info@example.com',
+      address: 'Dehradun, Uttarakhand',
+    };
+    contactItems.forEach(item => {
+      const type = (item.type || '').toLowerCase();
+      const val = item.value || '';
+      if (type.includes('phone') || type === 'call') info.phone = val;
+      if (type.includes('whatsapp')) info.whatsapp = val.replace(/\D/g, ''); // Extract digits for wa link
+      if (type.includes('email')) info.email = val;
+      if (type.includes('address') || type.includes('office')) info.address = val;
+    });
+    // Ensure whatsapp is populated if phone is but wa is not
+    if (info.phone && info.whatsapp === '919876543210') {
+      info.whatsapp = info.phone.replace(/\D/g, '');
+    }
+    return info;
+  }, [contactItems]);
 
   useEffect(() => {
     document.title = 'Contact | Book our Uttarakhand';
@@ -55,7 +81,7 @@ export default function ContactPage() {
       return;
     }
 
-    window.open(getWhatsAppUrl({ phone: '919876543210', text: whatsappText }), '_blank', 'noopener,noreferrer');
+    window.open(getWhatsAppUrl({ phone: contactInfo.whatsapp, text: whatsappText }), '_blank', 'noopener,noreferrer');
     setStatus('success');
     setFormData(initialForm);
     setErrors({});
@@ -72,12 +98,12 @@ export default function ContactPage() {
           <h1>Contact Us</h1>
           <p>Tell us your dates and we’ll suggest the best Uttarakhand plan within your budget.</p>
           <div className="contact-hero-actions">
-            <a className="primary-cta" href="tel:+919876543210">
+            <a className="primary-cta" href={`tel:${contactInfo.phone}`}>
               <FaPhoneAlt aria-hidden="true" /> Call now
             </a>
             <a
               className="secondary-link"
-              href={getWhatsAppUrl({ phone: '919876543210', text: 'Hello! I want to plan an Uttarakhand trip. Please share options.' })}
+              href={getWhatsAppUrl({ phone: contactInfo.whatsapp, text: 'Hello! I want to plan an Uttarakhand trip. Please share options.' })}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -92,16 +118,16 @@ export default function ContactPage() {
           <aside className="contact-panel">
             <h2>Reach us</h2>
             <div className="contact-cards">
-              <a className="contact-card" href="tel:+919876543210">
+              <a className="contact-card" href={`tel:${contactInfo.phone}`}>
                 <FaPhoneAlt aria-hidden="true" />
                 <div>
                   <strong>Phone</strong>
-                  <span>+91 98765 43210</span>
+                  <span>{contactInfo.phone}</span>
                 </div>
               </a>
               <a
                 className="contact-card"
-                href={getWhatsAppUrl({ phone: '919876543210', text: 'Hello! I want to enquire about an Uttarakhand tour package.' })}
+                href={getWhatsAppUrl({ phone: contactInfo.whatsapp, text: 'Hello! I want to enquire about an Uttarakhand tour package.' })}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -111,18 +137,18 @@ export default function ContactPage() {
                   <span>Fastest replies</span>
                 </div>
               </a>
-              <a className="contact-card" href="mailto:info@example.com">
+              <a className="contact-card" href={`mailto:${contactInfo.email}`}>
                 <FaEnvelope aria-hidden="true" />
                 <div>
                   <strong>Email</strong>
-                  <span>info@example.com</span>
+                  <span>{contactInfo.email}</span>
                 </div>
               </a>
               <div className="contact-card contact-card-static" aria-label="Office location">
                 <FaMapMarkerAlt aria-hidden="true" />
                 <div>
                   <strong>Office</strong>
-                  <span>Dehradun, Uttarakhand</span>
+                  <span>{contactInfo.address}</span>
                 </div>
               </div>
             </div>

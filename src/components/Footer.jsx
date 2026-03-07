@@ -2,10 +2,30 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import footerScene from '../assets/images/footer-design.png';
 import useHomeSectionNavigation from '../hooks/useHomeSectionNavigation';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db, firebaseEnabled } from '../firebase/client';
+import useCmsCollection from '../hooks/useCmsCollection';
 
 function Footer() {
   const year = new Date().getFullYear();
   const goToHomeSection = useHomeSectionNavigation();
+
+  const { items: contactItems } = useCmsCollection('contact');
+  const contactInfo = React.useMemo(() => {
+    const info = {
+      phone: '+91 98765 43210',
+      email: 'info@example.com',
+      address: 'Dehradun, Uttarakhand',
+    };
+    contactItems.forEach(item => {
+      const type = (item.type || '').toLowerCase();
+      const val = item.value || '';
+      if (type.includes('phone') || type === 'call') info.phone = val;
+      if (type.includes('email')) info.email = val;
+      if (type.includes('address') || type.includes('office')) info.address = val;
+    });
+    return info;
+  }, [contactItems]);
 
   return (
     <footer className="site-footer">
@@ -30,9 +50,9 @@ function Footer() {
         </div>
         <div className="footer-contact">
           <h4>Contact</h4>
-          <p>Call us: <strong>+91 98765 43210</strong></p>
-          <p>Email: <a href="mailto:info@example.com">info@example.com</a></p>
-          <p className="muted">Office: Dehradun, Uttarakhand</p>
+          <p>Call us: <strong>{contactInfo.phone}</strong></p>
+          <p>Email: <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a></p>
+          <p className="muted">Office: {contactInfo.address}</p>
         </div>
         <div className="footer-newsletter">
           <h4>Stay Updated</h4>
@@ -67,28 +87,33 @@ function NewsletterForm() {
       return;
     }
 
-    if (!endpoint) {
-      setStatus('error');
-      setMessage('Newsletter endpoint is not configured.');
-      return;
-    }
-
     setStatus('submitting');
     setMessage('');
 
     try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      if (endpoint) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: trimmedEmail,
+            source: 'bookouruttarakhand-newsletter',
+            submittedAt: new Date().toISOString(),
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Newsletter request failed');
+        }
+      } else if (firebaseEnabled && db) {
+        await addDoc(collection(db, 'newsletterSignups'), {
           email: trimmedEmail,
           source: 'bookouruttarakhand-newsletter',
           submittedAt: new Date().toISOString(),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Newsletter request failed');
+          createdAt: serverTimestamp(),
+        });
+      } else {
+        throw new Error('Newsletter endpoint is not configured.');
       }
 
       setStatus('success');

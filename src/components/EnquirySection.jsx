@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db, firebaseEnabled } from '../firebase/client';
 
 const initialForm = {
   name: '',
@@ -53,28 +55,33 @@ export default function EnquirySection() {
       return;
     }
 
-    if (!endpoint) {
-      setStatus('error');
-      setFeedback('Enquiry endpoint is not configured.');
-      return;
-    }
-
     setStatus('submitting');
     setFeedback('');
 
     try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      if (endpoint) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            source: 'bookouruttarakhand-enquiry',
+            submittedAt: new Date().toISOString(),
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Enquiry request failed');
+        }
+      } else if (firebaseEnabled && db) {
+        await addDoc(collection(db, 'enquiries'), {
           ...formData,
           source: 'bookouruttarakhand-enquiry',
           submittedAt: new Date().toISOString(),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Enquiry request failed');
+          createdAt: serverTimestamp(),
+        });
+      } else {
+        throw new Error('Enquiry endpoint is not configured.');
       }
 
       setStatus('success');

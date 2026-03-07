@@ -11,7 +11,8 @@ import {
   FaTimes,
   FaWhatsapp,
 } from 'react-icons/fa';
-import { uttarakhandTourPackages } from '../data/uttarakhandTourPackages';
+import { uttarakhandTourPackages as defaultPackages } from '../data/uttarakhandTourPackages';
+import useCmsCollection from '../hooks/useCmsCollection';
 import { categoryFromSlug, slugFromCategory, tourPackageCategories } from '../data/tourPackageCategories';
 
 function assetUrl(value) {
@@ -442,6 +443,12 @@ export default function TourPackages() {
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [openFaqIndex, setOpenFaqIndex] = useState(-1);
 
+  const { items: cmsItems } = useCmsCollection('packages');
+  const uttarakhandTourPackages = cmsItems.length > 0 ? cmsItems : defaultPackages;
+  
+  const { items: cmsTestimonials } = useCmsCollection('testimonials');
+  const displayTestimonials = cmsTestimonials.length > 0 ? cmsTestimonials : TESTIMONIALS;
+
   const activeCategory = categoryFromSlug(searchParams.get('category'));
 
   const scrollToPackages = () => {
@@ -451,14 +458,14 @@ export default function TourPackages() {
     }
   };
 
-  const categories = useMemo(() => {
-    const available = new Set(uttarakhandTourPackages.map((p) => p.category));
-    return tourPackageCategories.filter((c) => c.category === 'All' || available.has(c.category));
-  }, []);
-
   const durationFilter = useMemo(() => DURATION_FILTERS.find((f) => f.key === durationKey) ?? DURATION_FILTERS[0], [durationKey]);
   const budgetFilter = useMemo(() => BUDGET_FILTERS.find((f) => f.key === budgetKey) ?? BUDGET_FILTERS[0], [budgetKey]);
   const sortOption = useMemo(() => SORT_OPTIONS.find((o) => o.key === sortKey) ?? SORT_OPTIONS[0], [sortKey]);
+
+  const categories = useMemo(() => {
+    const available = new Set(uttarakhandTourPackages.map((p) => p.category));
+    return tourPackageCategories.filter((c) => c.category === 'All' || available.has(c.category));
+  }, [uttarakhandTourPackages]);
 
   const filteredPackages = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -473,10 +480,10 @@ export default function TourPackages() {
       })
       .slice()
       .sort(sortOption.compare);
-  }, [activeCategory, budgetFilter, durationFilter, query, sortOption]);
+  }, [activeCategory, budgetFilter, durationFilter, query, sortOption, uttarakhandTourPackages]);
 
-  const featured = useMemo(() => uttarakhandTourPackages.filter((p) => p.featured).slice(0, 4), []);
-  const seasonal = useMemo(() => uttarakhandTourPackages.filter((p) => p.category === 'Seasonal Packages').slice(0, 4), []);
+  const featured = useMemo(() => uttarakhandTourPackages.filter((p) => p.featured).slice(0, 4), [uttarakhandTourPackages]);
+  const seasonal = useMemo(() => uttarakhandTourPackages.filter((p) => p.category === 'Seasonal Packages').slice(0, 4), [uttarakhandTourPackages]);
 
   const setCategory = (category) => {
     if (category === 'All') {
@@ -488,10 +495,10 @@ export default function TourPackages() {
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setTestimonialIndex((idx) => (idx + 1) % TESTIMONIALS.length);
+      setTestimonialIndex((idx) => (idx + 1) % displayTestimonials.length);
     }, 5500);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [displayTestimonials.length]);
 
   const resetFilters = () => {
     setCategory('All');
@@ -750,14 +757,14 @@ export default function TourPackages() {
           <h2 className="section-heading">What Travelers Say</h2>
           <div className="tours-testimonial-card" role="group" aria-label="Testimonials slider">
             <div className="tours-testimonial-top">
-              <strong>{TESTIMONIALS[testimonialIndex].name}</strong>
-              <Stars value={TESTIMONIALS[testimonialIndex].rating} />
+              <strong>{displayTestimonials[testimonialIndex]?.name}</strong>
+              <Stars value={displayTestimonials[testimonialIndex]?.rating || 5} />
             </div>
-            <p>{TESTIMONIALS[testimonialIndex].text}</p>
+            <p>{displayTestimonials[testimonialIndex]?.text}</p>
             <div className="tours-testimonial-dots" aria-label="Select testimonial">
-              {TESTIMONIALS.map((t, idx) => (
+              {displayTestimonials.map((t, idx) => (
                 <button
-                  key={t.name}
+                  key={t.name || idx}
                   type="button"
                   className={idx === testimonialIndex ? 'tours-dot active' : 'tours-dot'}
                   onClick={() => setTestimonialIndex(idx)}

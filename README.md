@@ -27,12 +27,41 @@ App runs at `http://localhost:5173` by default.
 
 ## Environment variables
 
-Create `.env` in project root:
+Create `.env.local` in project root (or copy `.env.example` -> `.env.local`):
 
 ```env
 VITE_ENQUIRY_ENDPOINT=https://your-api.example.com/enquiry
 VITE_NEWSLETTER_ENDPOINT=https://your-api.example.com/newsletter
 ```
+
+### Firebase CMS (recommended $0 setup)
+
+This project includes a lightweight admin panel at `/admin` powered by Firebase (Auth + Firestore + Storage).
+
+1) Create a Firebase project
+2) Enable **Authentication -> Email/Password**
+3) Create **Firestore Database** and **Storage**
+4) Copy `app/.env.example` to `app/.env.local` and fill in your Firebase web config values
+5) Set your bootstrap admin email(s) in:
+   - `app/firestore.rules` (replace `you@example.com`)
+   - `app/storage.rules` (replace `you@example.com`)
+   - `VITE_BOOTSTRAP_ADMIN_EMAILS` in `app/.env.local` (UI helper)
+6) Deploy rules using Firebase CLI (or paste them in the Firebase Console):
+
+```bash
+# from /app
+firebase deploy --only firestore:rules,storage
+```
+
+7) Create a Firebase Auth user (Console -> Authentication -> Users)
+8) Open `http://localhost:5173/admin`, sign in, click **Make me admin**, then use **Seed defaults**
+
+Notes:
+- Home page sections now read from Firestore collections:
+  - `heroSlides`
+  - `homeDestinations`
+  - `homePackages`
+- Enquiry form and newsletter will save to Firestore (`enquiries`, `newsletterSignups`) when endpoints are not configured.
 
 ### Expected form payloads
 
